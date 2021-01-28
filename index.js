@@ -7,6 +7,7 @@ const client = new Discord.Client()
 const capitalizeRand = getRandomInt(3, 10)
 const exclamationPointsRand = getRandomInt(0, 10)
 const extraRand = getRandomInt(0, 10)
+const targetWord = 'beastie'
 
 // my functions
 function getRandomInt(min, max) {
@@ -67,7 +68,7 @@ client.on('message', message => {
     // console.log(message)
     // console.log(message.channel.id)
     // console.log(message.content)
-    if (message.content.includes('beastie')) {
+    if (message.content.includes(targetWord)) {
         message.channel.send(beastieBoysify(message.content));
     }
 })
