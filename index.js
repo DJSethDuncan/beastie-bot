@@ -66,12 +66,19 @@ client.once('ready', () => {
 })
 
 client.on('message', message => {
-    if (message.content.includes(targetWord) && message.author.id != '91971213080940544') {
-        console.log('author: ', message.author.id + ' ' + message.author.username)
-        console.log('content: ', message.content)
-        const channelMessage = beastieBoysify(message.content)
-        console.log('beastiebot reply: ', channelMessage)
-        message.channel.send(channelMessage);
+    if (message.content.includes(targetWord)) {
+        if (message.author.id != '91971213080940544') {
+            const jonChance = getRandomInt(1, 10)
+            if (jonChance > 1) {
+                return
+            }
+        } else {
+            console.log('author: ', message.author.id + ' ' + message.author.username)
+            console.log('content: ', message.content)
+            const channelMessage = beastieBoysify(message.content)
+            console.log('beastiebot reply: ', channelMessage)
+            message.channel.send(channelMessage);
+        }
     }
 })
 
