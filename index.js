@@ -70,6 +70,7 @@ client.on('message', message => {
     if (message.content.includes(targetWord)) {
         if (message.author.id == '91971213080940544') {
             const jonChance = getRandomInt(1, 10)
+            console.log('Jon rolled a ' + jonChance)
             if (jonChance > 1) {
                 return
             }
