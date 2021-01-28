@@ -67,7 +67,7 @@ client.once('ready', () => {
 
 client.on('message', message => {
     if (message.content.includes(targetWord)) {
-        if (message.author.id != '91971213080940544') {
+        if (message.author.id == '91971213080940544') {
             const jonChance = getRandomInt(1, 10)
             if (jonChance > 1) {
                 return
