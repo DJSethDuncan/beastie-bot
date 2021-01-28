@@ -59,6 +59,7 @@ function beastieBoysify(text) {
     return beastieReply
 }
 
+
 // discord stuff
 client.once('ready', () => {
     const drop = beastieBoysify('DROP')
@@ -72,13 +73,12 @@ client.on('message', message => {
             if (jonChance > 1) {
                 return
             }
-        } else {
-            console.log('author: ', message.author.id + ' ' + message.author.username)
-            console.log('content: ', message.content)
-            const channelMessage = beastieBoysify(message.content)
-            console.log('beastiebot reply: ', channelMessage)
-            message.channel.send(channelMessage);
         }
+        console.log('author: ', message.author.id + ' ' + message.author.username)
+        console.log('content: ', message.content)
+        const channelMessage = beastieBoysify(message.content)
+        console.log('beastiebot reply: ', channelMessage)
+        message.channel.send(channelMessage);
     }
 })
 
