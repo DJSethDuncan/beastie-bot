@@ -18,7 +18,7 @@ function isVowel(c) {
 }
 
 function moreVowels(text) {
-    let extraRand = getRandomInt(0, 10)
+    let extraRand = getRandomInt(1, 10)
     let textArray = text.split('')
     let moreVowels = ''
     for (i = 0; i < text.length; i++) {
@@ -69,7 +69,9 @@ client.on('message', message => {
     if (message.content.includes(targetWord) && message.author.id != '91971213080940544') {
         console.log('author: ', message.author.id + ' ' + message.author.username)
         console.log('content: ', message.content)
-        message.channel.send(beastieBoysify(message.content));
+        const channelMessage = beastieBoysify(message.content)
+        console.log('beastiebot reply: ', channelMessage)
+        message.channel.send(channelMessage);
     }
 })
 
