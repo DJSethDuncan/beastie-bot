@@ -18,11 +18,11 @@ function isVowel(c) {
 }
 
 function moreVowels(text) {
-    let extraRand = getRandomInt(1, 10)
     let textArray = text.split('')
     let moreVowels = ''
     for (i = 0; i < text.length; i++) {
         if (isVowel(text.charAt(i))) {
+            let extraRand = getRandomInt(1, 10)
             for (j=1; j<=extraRand; j++) {
                 moreVowels += text.charAt(i)
             }
