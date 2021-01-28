@@ -65,11 +65,9 @@ client.once('ready', () => {
 })
 
 client.on('message', message => {
-    // console.log(message)
-    // console.log(message.channel.id)
-    // console.log(message.content)
-    if (message.content.includes(targetWord)) {
-        console.log(message)
+    if (message.content.includes(targetWord) && message.author.id != '91971213080940544') {
+        console.log('author: ', message.author.id + ' ' + message.author.username)
+        console.log('content: ', message.content)
         message.channel.send(beastieBoysify(message.content));
     }
 })
