@@ -4,10 +4,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 // my vars
-const capitalizeRand = getRandomInt(3, 10)
-const exclamationPointsRand = getRandomInt(0, 10)
-const extraRand = getRandomInt(0, 10)
-const targetWord = 'beastie'
+let targetWord = 'beastie'
 
 // my functions
 function getRandomInt(min, max) {
@@ -17,10 +14,11 @@ function getRandomInt(min, max) {
 }
 
 function isVowel(c) {
-    return ['a', 'e', 'i', 'o', 'u'].indexOf(c.toLowerCase()) !== -1
+    return ['a','e','i','o','u'].indexOf(c.toLowerCase()) !== -1
 }
 
 function moreVowels(text) {
+    let extraRand = getRandomInt(0, 10)
     let textArray = text.split('')
     let moreVowels = ''
     for (i = 0; i < text.length; i++) {
@@ -35,6 +33,8 @@ function moreVowels(text) {
 }
 
 function beastieBoysify(text) {
+    const capitalizeRand = getRandomInt(3, 10)
+    const exclamationPointsRand = getRandomInt(0, 10)
     const messageArray = text.split(' ')
     let beastieReply = messageArray[messageArray.length - 1]
     let exclamationPoints = ''
@@ -61,7 +61,8 @@ function beastieBoysify(text) {
 
 // discord stuff
 client.once('ready', () => {
-	console.log('BeastieBot is about to DROP')
+    const drop = beastieBoysify('DROP')
+    console.log('BeastieBot is about to ' + drop)
 })
 
 client.on('message', message => {
