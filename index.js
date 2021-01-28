@@ -69,6 +69,7 @@ client.on('message', message => {
     // console.log(message.channel.id)
     // console.log(message.content)
     if (message.content.includes(targetWord)) {
+        console.log(message)
         message.channel.send(beastieBoysify(message.content));
     }
 })
