@@ -5,12 +5,13 @@ const client = new Discord.Client()
 
 // my vars
 let targetWord = 'beastie'
+let bannedUsers = ['91971213080940544']
 
 // my functions
 function getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    min = Math.ceil(min)
+    max = Math.floor(max)
+    return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 function isVowel(c) {
@@ -19,14 +20,14 @@ function isVowel(c) {
 
 function moreVowels(text) {
     let textArray = text.split('')
-    let moreVowels = ''
     for (i = 0; i < text.length; i++) {
+        let moreVowels = ''
         if (isVowel(text.charAt(i))) {
             let extraRand = getRandomInt(1, 10)
-            for (j=1; j<=extraRand; j++) {
+            for (j = 1; j <= extraRand; j++) {
                 moreVowels += text.charAt(i)
+                textArray.splice(i, 1, moreVowels)
             }
-            textArray.splice(i, 1, moreVowels)
         }
     }
     return (textArray.join())
@@ -42,33 +43,27 @@ function beastieBoysify(text) {
     for (i = 1; i <= exclamationPointsRand; i++) {
         exclamationPoints += '!'
     }
-
-    // MODIFIERS
-
     // capitalize
     if (capitalizeRand > 5) {
         beastieReply = moreVowels(beastieReply)
         beastieReply = beastieReply.toUpperCase()
     }
-
     // strip non alphanum
     beastieReply = beastieReply.replace(/\W/g, '')
-
     // add exclamation points
     beastieReply += exclamationPoints
     return beastieReply
 }
 
-
 // discord stuff
 client.once('ready', () => {
-    const drop = beastieBoysify('DROP')
+    const drop = beastieBoysify('drop')
     console.log('BeastieBot is about to ' + drop)
 })
 
 client.on('message', message => {
     if (message.content.includes(targetWord)) {
-        if (message.author.id == '91971213080940544') {
+        if (bannedUsers.includes(message.author.id)) {
             const jonChance = getRandomInt(1, 10)
             console.log('Jon rolled a ' + jonChance)
             if (jonChance > 1) {
@@ -79,7 +74,7 @@ client.on('message', message => {
         console.log('content: ', message.content)
         const channelMessage = beastieBoysify(message.content)
         console.log('beastiebot reply: ', channelMessage)
-        message.channel.send(channelMessage);
+        message.channel.send(channelMessage)
     }
 })
 
