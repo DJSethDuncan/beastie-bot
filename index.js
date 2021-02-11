@@ -62,7 +62,7 @@ client.once('ready', () => {
 })
 
 client.on('message', message => {
-    if (message.content.includes(targetWord)) {
+    if (message.content.includes(targetWord.toLowerCase())) {
         if (bannedUsers.includes(message.author.id)) {
             const jonChance = getRandomInt(1, 10)
             console.log('Jon rolled a ' + jonChance)
