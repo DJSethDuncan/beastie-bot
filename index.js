@@ -4,8 +4,7 @@ const Discord = require('discord.js')
 const client = new Discord.Client()
 
 // my vars
-let targetWord = 'beastie'
-let bannedUsers = ['91971213080940544']
+let targetWordArray = ['beastie boys', 'beastie', 'intergalactic', 'planetary', 'sabotage']
 
 // my functions
 function getRandomInt(min, max) {
@@ -55,6 +54,14 @@ function beastieBoysify(text) {
     return beastieReply
 }
 
+let testMessage = {
+    content: 'checking beastie boys to see if this works',
+    author: {
+        id: 1,
+        username: 'seth'
+    }
+}
+
 // discord stuff
 client.once('ready', () => {
     const drop = beastieBoysify('drop')
@@ -63,16 +70,16 @@ client.once('ready', () => {
 
 client.on('message', message => {
     let messageContent = message.content.toLowerCase();
-    if (messageContent.includes(targetWord)) {
-        if (bannedUsers.includes(message.author.id)) {
-            const jonChance = getRandomInt(1, 10)
-            console.log('Jon rolled a ' + jonChance)
-            if (jonChance > 1) {
-                return
-            }
+    let messageContentArray = messageContent.split(' ');
+    let respondCheck = false;
+    messageContentArray.forEach((thisWord) => {
+        if (targetWordArray.indexOf(thisWord) > -1) {
+            respondCheck = true;
+            console.log('author: ', message.author.id + ' ' + message.author.username)
+            console.log('content: ', message.content)
         }
-        console.log('author: ', message.author.id + ' ' + message.author.username)
-        console.log('content: ', message.content)
+    })
+    if (respondCheck) {
         const channelMessage = beastieBoysify(message.content)
         console.log('beastiebot reply: ', channelMessage)
         message.channel.send(channelMessage)
