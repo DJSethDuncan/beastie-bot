@@ -38,7 +38,6 @@ function beastieBoysify(text) {
     const messageArray = text.split(' ')
     let beastieReply = messageArray[messageArray.length - 1]
     let exclamationPoints = ''
-
     for (i = 1; i <= exclamationPointsRand; i++) {
         exclamationPoints += '!'
     }
@@ -52,14 +51,6 @@ function beastieBoysify(text) {
     // add exclamation points
     beastieReply += exclamationPoints
     return beastieReply
-}
-
-let testMessage = {
-    content: 'checking beastie boys to see if this works',
-    author: {
-        id: 1,
-        username: 'seth'
-    }
 }
 
 // discord stuff
