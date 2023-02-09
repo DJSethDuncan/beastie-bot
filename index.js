@@ -69,7 +69,11 @@ client.on("message", (message) => {
   let messageContent = message.content.toLowerCase();
   let messageContentArray = messageContent.split(" ");
   let respondCheck = false;
-  console.log("message: ", message);
+  if (message.channel.type === "text") {
+    console.log(
+      `New message from ${message.author.username} (${message.channel.name}): ${message.content}`
+    );
+  }
   messageContentArray.forEach((thisWord) => {
     if (targetWordArray.indexOf(thisWord) > -1) {
       respondCheck = true;
