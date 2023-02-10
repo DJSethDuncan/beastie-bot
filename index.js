@@ -8,8 +8,9 @@ client.once("ready", () => {
   console.log("BeastieBot is about to drop");
 });
 
-client.on("message", (messagePayload) => {
-  const { response } = Message.processMessage(messagePayload);
+client.on("message", async (messagePayload) => {
+  const { response } = await Message.processMessage(messagePayload);
+  console.log("response", response.keys);
   if (response) messagePayload.channel.send(response);
 });
 
