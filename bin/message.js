@@ -40,24 +40,23 @@ module.exports = {
           channel.name ?? "DM"
         }): ${content}`
       );
+      if (botMessage) {
+        const openAIresponse = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: botMessage,
+          max_tokens: 500,
+          temperature: 0.8,
+        });
+        // console.log("openAIresponse: ", openAIresponse.data.choices);
+        action.response = openAIresponse.data.choices[0].text;
+      } else {
+        // beastie bot reply
+        if (this.hasWordInList(content, wordLists.beastie)) {
+          action.response = this.beastieBoysify(content);
+        }
 
-      // beastie bot reply
-      if (this.hasWordInList(content, wordLists.beastie)) {
-        action.response = this.beastieBoysify(content);
-      }
-
-      // DM reply
-      if (channel.type === "dm") {
-        if (botMessage) {
-          const openAIresponse = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: botMessage,
-            max_tokens: 500,
-            temperature: 0.8,
-          });
-          // console.log("openAIresponse: ", openAIresponse.data.choices);
-          action.response = openAIresponse.data.choices[0].text;
-        } else {
+        // DM reply
+        if (channel.type === "dm") {
           action.response = this.sarcasm(content);
         }
       }
