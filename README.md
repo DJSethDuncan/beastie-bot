@@ -3,7 +3,9 @@
 
 A Discord bot.
 
-BeastieBot watches messages for the trigger word (default is 'beastie') then takes the LAST word of the message, and randomly adds duplicate-vowels, capitalization, and extra exclamation points.
+BeastieBot started as a simple joke, but he is growing smarter.
+
+He can still reply using the trigger words like below:
 
 Example:
 ```
@@ -18,6 +20,18 @@ BeastieBot > HAAAHAAAAAA!!!!!
 
 ```
 
+but now he can also respond to requests that start with `bot...`
+
+Example:
+
+![image](https://user-images.githubusercontent.com/4060878/218017190-af2bf800-5a42-415b-9d9b-cc36e420478b.png)
+
 * uses [discord.js](https://discordjs.guide/)
-* add a .env w/ TOKEN={your discord bot token}
+* uses [openAI](https://openai.com/api/)
+
+## How to
+* `git clone`
+* `npm i`
+* fill in `.env` using the keys shown in `.env.example`
+* `npm start` OR
 * deploy somewhere useful
