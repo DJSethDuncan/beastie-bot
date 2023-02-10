@@ -1,3 +1,11 @@
+// import { Configuration, OpenAIApi } from "openai";
+const OpenAI = require("openai");
+const configuration = new OpenAI.Configuration({
+  organization: "org-2Kw8HWwGGX27vsKcAqzUzgSg",
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAI.OpenAIApi(configuration);
+
 const wordLists = {
   beastie: [
     "beastie boys",
@@ -10,13 +18,16 @@ const wordLists = {
 };
 
 module.exports = {
-  processMessage(message) {
+  async processMessage(message) {
     try {
       const action = {
         response: "",
       };
 
       const { channel, author, content } = message;
+      const botMessage = content.match(/^bot\W/gm)
+        ? content.split(" ").slice(1).join(" ")
+        : null;
 
       // ignore bot messages
       if (author.id === "804419214894301227") {
@@ -37,7 +48,18 @@ module.exports = {
 
       // DM reply
       if (channel.type === "dm") {
-        action.response = this.sarcasm(content);
+        if (botMessage) {
+          const openAIresponse = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: botMessage,
+            max_tokens: 500,
+            temperature: 0.8,
+          });
+          // console.log("openAIresponse: ", openAIresponse.data.choices);
+          action.response = openAIresponse.data.choices[0].text;
+        } else {
+          action.response = this.sarcasm(content);
+        }
       }
 
       // return
