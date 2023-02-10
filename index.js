@@ -10,7 +10,7 @@ client.once("ready", () => {
 
 client.on("message", async (messagePayload) => {
   const { response } = await Message.processMessage(messagePayload);
-  console.log("response", response.keys);
+  console.log("Response: ", response);
   if (response) messagePayload.channel.send(response);
 });
 

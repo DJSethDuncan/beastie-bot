@@ -41,6 +41,9 @@ module.exports = {
         }): ${content}`
       );
       if (botMessage) {
+        if (author.id === "91660606100209664") {
+          action.response = this.sarcasm(botMessage);
+        }
         const openAIresponse = await openai.createCompletion({
           model: "text-davinci-003",
           prompt: botMessage,
