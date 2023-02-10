@@ -10,7 +10,7 @@ client.once("ready", () => {
 
 client.on("message", (messagePayload) => {
   const { response } = Message.processMessage(messagePayload);
-  if (response) channel.send(response);
+  if (response) messagePayload.channel.send(response);
 });
 
 client.login(process.env.TOKEN);

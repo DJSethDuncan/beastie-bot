@@ -5,49 +5,49 @@ const wordLists = {
     "intergalactic",
     "planetary",
     "sabotage",
-    "fight for your right",
+    "fight",
   ],
-};
-
-const action = {
-  response: "",
 };
 
 module.exports = {
   processMessage(message) {
     try {
+      const action = {
+        response: "",
+      };
+
       const { channel, author, content } = message;
-      // ignore DMs
-      if (channel.type === "dm") {
-        return action;
-      }
 
       // ignore bot messages
       if (author.id === "804419214894301227") {
         return action;
       }
+
       // log message
       console.log(
-        `New message from ${author.username} (${channel.name}): ${content}`
+        `New message from ${author.username} (channel: ${
+          channel.name ?? "DM"
+        }): ${content}`
       );
-
-      // Run Checks
 
       // beastie bot reply
       if (this.hasWordInList(content, wordLists.beastie)) {
         action.response = this.beastieBoysify(content);
       }
 
+      // DM reply
+      if (channel.type === "dm") {
+        action.response = this.sarcasm(content);
+      }
+
       // return
       return action;
     } catch (e) {
       console.error("There was a problem processing this message.");
-      // console.error(e);
+      console.error(e);
     }
   },
   hasWordInList(messageContent, wordList) {
-    console.log("messageContent", messageContent);
-    console.log("wordList", wordList);
     const messageContentArray = messageContent.toLowerCase().split(" ");
     const intersection = messageContentArray.filter((element) =>
       wordList.includes(element)
@@ -73,6 +73,14 @@ module.exports = {
     // add exclamation points
     beastieReply += exclamationPoints;
     return beastieReply;
+  },
+  sarcasm(text) {
+    return text
+      .split("")
+      .map((item, index) =>
+        index % 2 === 0 ? item.toUpperCase() : item.toLowerCase()
+      )
+      .join("");
   },
   getRandomInt(min, max) {
     min = Math.ceil(min);
