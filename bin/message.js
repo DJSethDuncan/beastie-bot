@@ -103,7 +103,7 @@ module.exports = {
     return text
       .split("")
       .map((item, index) =>
-        index % 2 === 0 ? item.toUpperCase() : item.toLowerCase()
+        index % 2 === 1 ? item.toUpperCase() : item.toLowerCase()
       )
       .join("");
   },
