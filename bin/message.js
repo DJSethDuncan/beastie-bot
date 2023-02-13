@@ -41,18 +41,14 @@ module.exports = {
         }): ${content}`
       );
       if (botMessage) {
-        if (author.id === "91660606100209664") {
-          action.response = this.sarcasm(botMessage);
-        } else {
-          const openAIresponse = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: botMessage,
-            max_tokens: 500,
-            temperature: 0.8,
-          });
-          // console.log("openAIresponse: ", openAIresponse.data.choices);
-          action.response = openAIresponse.data.choices[0].text;
-        }
+        const openAIresponse = await openai.createCompletion({
+          model: "text-davinci-003",
+          prompt: botMessage,
+          max_tokens: 500,
+          temperature: 0.8,
+        });
+        // console.log("openAIresponse: ", openAIresponse.data.choices);
+        action.response = openAIresponse.data.choices[0].text;
       } else {
         // beastie bot reply
         if (this.hasWordInList(content, wordLists.beastie)) {
