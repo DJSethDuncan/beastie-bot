@@ -1,10 +1,11 @@
 // import { Configuration, OpenAIApi } from "openai";
 const OpenAI = require("openai");
 const configuration = new OpenAI.Configuration({
-  organization: "org-2Kw8HWwGGX27vsKcAqzUzgSg",
+  organization: process.env.ORG_ID,
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAI.OpenAIApi(configuration);
+const Tools = require("./tools");
 
 const wordLists = {
   beastie: [
@@ -25,7 +26,7 @@ module.exports = {
       };
 
       const { channel, author, content } = message;
-      const botMessage = content.match(/^bot\W/gm)
+      const botMessage = Tools.firstWordIs(content, "bot")
         ? content.split(" ").slice(1).join(" ")
         : null;
 
