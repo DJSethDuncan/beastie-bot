@@ -49,22 +49,30 @@ module.exports = {
         });
 
         if (isImageMessage) {
-          const imageContent = content.split(" ").slice(1).join(" ");
-          const openAIImageResponse = await openai.createImage({
-            prompt: imageContent,
-            n: 1,
-            size: "512x512",
-          });
-          action.response = openAIImageResponse.data.data[0].url;
+          try {
+            const imageContent = content.split(" ").slice(1).join(" ");
+            const openAIImageResponse = await openai.createImage({
+              prompt: imageContent,
+              n: 1,
+              size: "512x512",
+            });
+            action.response = openAIImageResponse.data.data[0].url;
+          } catch (e) {
+            action.response = "No.";
+          }
         } else {
-          const openAIresponse = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: botMessage,
-            max_tokens: 500,
-            temperature: 0.8,
-          });
-          // console.log("openAIresponse: ", openAIresponse.data.choices);
-          action.response = openAIresponse.data.choices[0].text;
+          try {
+            const openAIresponse = await openai.createCompletion({
+              model: "text-davinci-003",
+              prompt: botMessage,
+              max_tokens: 500,
+              temperature: 0.8,
+            });
+            // console.log("openAIresponse: ", openAIresponse.data.choices);
+            action.response = openAIresponse.data.choices[0].text;
+          } catch (e) {
+            action.response = "No.";
+          }
         }
       } else {
         // beastie bot reply
