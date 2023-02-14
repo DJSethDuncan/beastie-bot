@@ -1,10 +1,11 @@
 // import { Configuration, OpenAIApi } from "openai";
 const OpenAI = require("openai");
 const configuration = new OpenAI.Configuration({
-  organization: "org-2Kw8HWwGGX27vsKcAqzUzgSg",
+  organization: process.env.ORG_ID,
   apiKey: process.env.OPENAI_API_KEY,
 });
 const openai = new OpenAI.OpenAIApi(configuration);
+const Tools = require("./tools");
 
 const wordLists = {
   beastie: [
@@ -25,8 +26,8 @@ module.exports = {
       };
 
       const { channel, author, content } = message;
-      const botMessage = content.match(/^bot\W/gm)
-        ? content.split(" ").slice(1).join(" ")
+      const botMessage = Tools.nthWordIs({ string: content, firstWord: "bot" })
+        ? Tools.removeFirstWord(content)
         : null;
 
       // ignore bot messages
@@ -41,21 +42,42 @@ module.exports = {
         }): ${content}`
       );
       if (botMessage) {
-        const openAIresponse = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: botMessage,
-          max_tokens: 500,
-          temperature: 0.8,
+        const isImageMessage = Tools.nthWordIs({
+          string: content,
+          firstWord: "image",
+          n: 1,
         });
-        // console.log("openAIresponse: ", openAIresponse.data.choices);
-        action.response = openAIresponse.data.choices[0].text;
+
+        if (isImageMessage) {
+          const imageContent = content.split(" ").slice(1).join(" ");
+          const openAIImageResponse = await openai.createImage({
+            prompt: imageContent,
+            n: 1,
+            size: "512x512",
+          });
+          action.response = openAIImageResponse.data.data[0].url;
+        } else {
+          const openAIresponse = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: botMessage,
+            max_tokens: 500,
+            temperature: 0.8,
+          });
+          // console.log("openAIresponse: ", openAIresponse.data.choices);
+          action.response = openAIresponse.data.choices[0].text;
+        }
       } else {
         // beastie bot reply
-        if (this.hasWordInList(content, wordLists.beastie)) {
+        if (
+          Tools.hasWordInList({
+            messageContent: content,
+            wordList: wordLists.beastie,
+          })
+        ) {
           action.response = this.beastieBoysify(content);
         }
 
-        // DM reply
+        // Handle DM reply
         if (channel.type === "dm") {
           action.response = this.sarcasm(content);
         }
@@ -68,16 +90,9 @@ module.exports = {
       console.error(e);
     }
   },
-  hasWordInList(messageContent, wordList) {
-    const messageContentArray = messageContent.toLowerCase().split(" ");
-    const intersection = messageContentArray.filter((element) =>
-      wordList.includes(element)
-    );
-    return !!intersection.length;
-  },
   beastieBoysify(text) {
-    const capitalizeRand = this.getRandomInt(3, 10);
-    const exclamationPointsRand = this.getRandomInt(0, 10);
+    const capitalizeRand = Tools.getRandomInt({ min: 3, max: 10 });
+    const exclamationPointsRand = Tools.getRandomInt({ min: 0, max: 10 });
     const messageArray = text.split(" ");
     let beastieReply = messageArray[messageArray.length - 1];
     let exclamationPoints = "";
@@ -103,17 +118,12 @@ module.exports = {
       )
       .join("");
   },
-  getRandomInt(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  },
   moreVowels(text) {
     let textArray = text.split("");
     for (i = 0; i < text.length; i++) {
       let moreVowels = "";
-      if (this.isVowel(text.charAt(i))) {
-        let extraRand = this.getRandomInt(1, 10);
+      if (Tools.isVowel(text.charAt(i))) {
+        let extraRand = Tools.getRandomInt({ min: 1, max: 10 });
         for (j = 1; j <= extraRand; j++) {
           moreVowels += text.charAt(i);
           textArray.splice(i, 1, moreVowels);
@@ -121,9 +131,5 @@ module.exports = {
       }
     }
     return textArray.join();
-  },
-  isVowel(c) {
-    //@TODO replace with a package
-    return ["a", "e", "i", "o", "u"].indexOf(c.toLowerCase()) !== -1;
   },
 };
