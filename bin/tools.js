@@ -1,6 +1,6 @@
 module.exports = {
-  firstWordIs(string, firstWord) {
+  nthWordIs(string, firstWord, n = 0) {
     const wordArray = string.split(" ");
-    return wordArray[0] === firstWord;
+    return wordArray[n] === firstWord;
   },
 };

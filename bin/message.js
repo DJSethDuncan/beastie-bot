@@ -26,7 +26,7 @@ module.exports = {
       };
 
       const { channel, author, content } = message;
-      const botMessage = Tools.firstWordIs(content, "bot")
+      const botMessage = Tools.nthWordIs(content, "bot")
         ? content.split(" ").slice(1).join(" ")
         : null;
 
@@ -42,14 +42,26 @@ module.exports = {
         }): ${content}`
       );
       if (botMessage) {
-        const openAIresponse = await openai.createCompletion({
-          model: "text-davinci-003",
-          prompt: botMessage,
-          max_tokens: 500,
-          temperature: 0.8,
-        });
-        // console.log("openAIresponse: ", openAIresponse.data.choices);
-        action.response = openAIresponse.data.choices[0].text;
+        const imageMessage = Tools.nthWordIs(content, "image", 1);
+
+        if (imageMessage) {
+          const imageContent = content.split(" ").slice(1).join(" ");
+          const openAIImageResponse = await openai.createImage({
+            prompt: imageContent,
+            n: 1,
+            size: "512x512",
+          });
+          action.response = openAIImageResponse.data.data[0].url;
+        } else {
+          const openAIresponse = await openai.createCompletion({
+            model: "text-davinci-003",
+            prompt: botMessage,
+            max_tokens: 500,
+            temperature: 0.8,
+          });
+          // console.log("openAIresponse: ", openAIresponse.data.choices);
+          action.response = openAIresponse.data.choices[0].text;
+        }
       } else {
         // beastie bot reply
         if (this.hasWordInList(content, wordLists.beastie)) {
