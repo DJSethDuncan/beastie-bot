@@ -1,5 +1,6 @@
 const tools = require("./tools");
 const openai = require("./openai");
+const config = require("./config");
 
 module.exports = {
   async botHandler(discordMessageContent) {
@@ -7,20 +8,31 @@ module.exports = {
       discordMessageContent
     );
 
-    switch (botMessageFirstWord) {
-      case "image":
-        const dalleResponse = await openai.dalle(
-          tools.removeFirstWord(discordMessageContent)
-        );
-        return dalleResponse;
-        break;
-      default:
-        const chatgptResponse = await openai.chatgpt({
-          query: discordMessageContent,
-        });
-        return chatgptResponse;
-        break;
+    let response = "";
+    if (discordMessageContent == "help") {
+      response = config.helpText;
+    } else {
+      switch (botMessageFirstWord) {
+        case "image":
+          response = await openai.dalle(
+            tools.removeFirstWord(discordMessageContent)
+          );
+          break;
+        case "smartly":
+          response = await openai.chatgpt({
+            query: discordMessageContent,
+            model: "davinci",
+          });
+          break;
+        default:
+          response = await openai.chatgpt({
+            query: discordMessageContent,
+          });
+          break;
+      }
     }
+
+    return response;
   },
   genericHandler(discordMessageContent) {
     if (
