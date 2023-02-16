@@ -1,4 +1,6 @@
 module.exports = {
+  ignoreUsers: ["804419214894301227"],
+  beSarcasticToUsers: [],
   helpText: `You can say things like:\n
 \`bot how are you today\`\n
 \`bot image a crying puppy\`\n
