@@ -27,8 +27,6 @@ client.on("message", async (messagePayload) => {
 
     if (config.ignoreUsers.includes(author.id)) return null;
 
-    const messageFirstWord = tools.getFirstWordLowercase(content);
-
     console.log(
       `New message from ${author.username} (author.id: ${
         author.id
@@ -43,12 +41,12 @@ client.on("message", async (messagePayload) => {
       response = tools.sarcasm(content);
     } else {
       // Handle channel message
+      const messageFirstWord = tools.getFirstWordLowercase(content);
       // check if the first word of the message matches a key in the triggerWordHandler object
       if (Object.keys(triggerWordHandler).includes(messageFirstWord)) {
         const processMessage = triggerWordHandler[messageFirstWord];
         response = await processMessage(tools.removeFirstWord(content));
       } else {
-        console.log("generic handler");
         // default to generic message parsing
         response = await handlers.genericHandler(content);
       }
