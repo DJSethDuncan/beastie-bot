@@ -4,6 +4,7 @@ const Discord = require("discord.js");
 const client = new Discord.Client();
 const handlers = require("./bin/handlers");
 const tools = require("./bin/tools");
+const config = require("./bin/config");
 
 /*
   this object holds trigger words and their respective handlers
@@ -24,16 +25,20 @@ client.on("message", async (messagePayload) => {
     const { channel, author, content } = messagePayload;
     let response = "";
 
-    if (author.id === "804419214894301227") return null;
+    if (config.ignoreUsers.includes(author.id)) return null;
+
     const messageFirstWord = tools.getFirstWordLowercase(content);
 
     console.log(
-      `New message from ${author.username} (channel: ${
-        channel.name ?? "DM"
-      }): ${content}`
+      `New message from ${author.username} (author.id: ${
+        author.id
+      }) (channel: ${channel.name ?? "DM"}): ${content}`
     );
 
-    if (channel.type === "dm") {
+    if (
+      channel.type === "dm" ||
+      config.beSarcasticToUsers.includes(author.id)
+    ) {
       // Handle direct message
       response = tools.sarcasm(content);
     } else {
