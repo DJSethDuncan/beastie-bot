@@ -2,16 +2,62 @@ const dotenv = require("dotenv");
 dotenv.config();
 const Discord = require("discord.js");
 const client = new Discord.Client();
-const Message = require("./bin/message");
+const handlers = require("./bin/handlers");
+const tools = require("./bin/tools");
+
+/*
+  this object holds trigger words and their respective handlers
+  handler functions should go in the ./bin/handlers file
+
+  ex: { triggerWord: handlerFunction }
+*/
+const triggerWordHandler = {
+  bot: handlers.botHandler,
+};
 
 client.once("ready", () => {
   console.log("BeastieBot is about to drop");
 });
 
 client.on("message", async (messagePayload) => {
-  const { response } = await Message.processMessage(messagePayload);
-  console.log("Response: ", response);
-  if (response) messagePayload.channel.send(response);
+  try {
+    const { channel, author, content } = messagePayload;
+    let response = "";
+
+    if (author.id === "804419214894301227") return null;
+    const messageFirstWord = tools.getFirstWordLowercase(content);
+
+    console.log(
+      `New message from ${author.username} (channel: ${
+        channel.name ?? "DM"
+      }): ${content}`
+    );
+
+    if (channel.type === "dm") {
+      // Handle direct message
+      response = tools.sarcasm(content);
+    } else {
+      // Handle channel message
+      // check if the first word of the message matches a key in the triggerWordHandler object
+      if (Object.keys(triggerWordHandler).includes(messageFirstWord)) {
+        const processMessage = triggerWordHandler[messageFirstWord];
+        response = await processMessage(tools.removeFirstWord(content));
+      } else {
+        console.log("generic handler");
+        // default to generic message parsing
+        response = await handlers.genericHandler(content);
+      }
+    }
+
+    if (response && process.env.ENVIRONMENT === "prod") {
+      messagePayload.channel.send(response);
+    } else {
+      console.log("DEV Bot Response: ", response);
+    }
+  } catch (error) {
+    // error
+    console.error(error);
+  }
 });
 
 client.login(process.env.TOKEN);
