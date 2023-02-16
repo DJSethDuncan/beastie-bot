@@ -18,6 +18,11 @@ module.exports = {
             tools.removeFirstWord(discordMessageContent)
           );
           break;
+        case "dumbly":
+          response = await openai.chatgpt({
+            query: discordMessageContent,
+            model: "ada",
+          });
         case "smartly":
           response = await openai.chatgpt({
             query: discordMessageContent,

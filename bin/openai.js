@@ -6,10 +6,11 @@ const configuration = new OpenAI.Configuration({
 const openai = new OpenAI.OpenAIApi(configuration);
 
 module.exports = {
-  async chatgpt({ query, model = "ada" }) {
+  async chatgpt({ query, model = "curie" }) {
     const models = {
       davinci: "text-davinci-003",
       ada: "text-ada-001",
+      curie: "text-curie-001",
     };
     try {
       const openAIresponse = await openai.createCompletion({
