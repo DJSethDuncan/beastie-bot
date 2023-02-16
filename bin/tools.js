@@ -3,7 +3,8 @@ const wordLists = require("./wordLists");
 module.exports = {
   getFirstWordLowercase(string) {
     const stringArray = string.toLowerCase().split(" ");
-    return stringArray[0];
+    // drop any punctuation attached to the first word
+    return module.exports.stripAlphaNum(stringArray[0]);
   },
   removeFirstWord(string) {
     return string.split(" ").slice(1).join(" ");
@@ -21,7 +22,6 @@ module.exports = {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   },
   isVowel(character) {
-    //@TODO replace with a package
     return ["a", "e", "i", "o", "u"].indexOf(character.toLowerCase()) !== -1;
   },
   beastieBoysify(text) {
@@ -42,7 +42,7 @@ module.exports = {
       beastieReply = beastieReply.toUpperCase();
     }
     // strip non alphanum
-    beastieReply = beastieReply.replace(/\W/g, "");
+    beastieReply = module.exports.stripAlphaNum(beastieReply);
     // add exclamation points
     beastieReply += exclamationPoints;
     return beastieReply;
@@ -68,5 +68,8 @@ module.exports = {
       }
     }
     return textArray.join();
+  },
+  stripAlphaNum(text) {
+    return text.replace(/\W/g, "");
   },
 };
