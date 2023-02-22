@@ -1,6 +1,16 @@
 module.exports = {
   ignoreUsers: ["804419214894301227"],
   beSarcasticToUsers: [],
+  wordCollections: {
+    beastie: [
+      "beastie boys",
+      "beastie",
+      "intergalactic",
+      "planetary",
+      "sabotage",
+      "fight",
+    ],
+  },
   replyCollections: {
     rateLimit: [
       "Daddy, chill...",

@@ -1,4 +1,3 @@
-const wordLists = require("./wordLists");
 const config = require("./config");
 
 module.exports = {
@@ -10,10 +9,10 @@ module.exports = {
   removeFirstWord(string) {
     return string.split(" ").slice(1).join(" ");
   },
-  hasWordInWordList({ messageContent, wordList }) {
+  hasWordInWordCollection({ messageContent, wordCollection }) {
     const messageContentArray = messageContent.toLowerCase().split(" ");
-    const intersection = wordLists[wordList].filter((element) =>
-      messageContentArray.includes(element)
+    const intersection = config.wordCollections[wordCollection].filter(
+      (element) => messageContentArray.includes(element)
     );
     return !!intersection.length;
   },

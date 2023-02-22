@@ -49,9 +49,9 @@ module.exports = {
   },
   genericHandler(discordMessageContent) {
     if (
-      tools.hasWordInWordList({
+      tools.hasWordInWordCollection({
         messageContent: discordMessageContent,
-        wordList: "beastie",
+        wordCollection: "beastie",
       })
     ) {
       return tools.beastieBoysify(discordMessageContent);
