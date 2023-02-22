@@ -1,4 +1,4 @@
-const wordLists = require("./wordLists");
+const config = require("./config");
 
 module.exports = {
   getFirstWordLowercase(string) {
@@ -9,10 +9,10 @@ module.exports = {
   removeFirstWord(string) {
     return string.split(" ").slice(1).join(" ");
   },
-  hasWordInWordList({ messageContent, wordList }) {
+  hasWordInWordCollection({ messageContent, wordCollection }) {
     const messageContentArray = messageContent.toLowerCase().split(" ");
-    const intersection = wordLists[wordList].filter((element) =>
-      messageContentArray.includes(element)
+    const intersection = config.wordCollections[wordCollection].filter(
+      (element) => messageContentArray.includes(element)
     );
     return !!intersection.length;
   },
@@ -71,5 +71,15 @@ module.exports = {
   },
   stripAlphaNum(text) {
     return text.replace(/\W/g, "");
+  },
+  getRandomReplyFromCollection(collectionName) {
+    if (collectionName in config.replyCollections) {
+      const thisCollection = config.replyCollections[collectionName];
+      return thisCollection[
+        module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })
+      ];
+    } else {
+      console.error(`No collection name found for ${collectionName}`);
+    }
   },
 };

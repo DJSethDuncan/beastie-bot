@@ -1,6 +1,25 @@
 module.exports = {
   ignoreUsers: ["804419214894301227"],
   beSarcasticToUsers: [],
+  wordCollections: {
+    beastie: [
+      "beastie boys",
+      "beastie",
+      "intergalactic",
+      "planetary",
+      "sabotage",
+      "fight",
+    ],
+  },
+  replyCollections: {
+    rateLimit: [
+      "Daddy, chill...",
+      "Dude slow down",
+      "omg...",
+      "please leave me alone for like TWO SECONDS",
+      "Look, ya'll gotta slow down and let me take a break",
+    ],
+  },
   helpText: `You can say things like:\n
 \`bot how are you today\`\n
 \`bot image a crying puppy\`\n
