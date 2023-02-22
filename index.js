@@ -12,6 +12,7 @@ const config = require("./bin/config");
 
   ex: { triggerWord: handlerFunction }
 */
+
 const triggerWordHandler = {
   bot: handlers.botHandler,
 };

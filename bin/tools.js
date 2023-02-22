@@ -1,4 +1,5 @@
 const wordLists = require("./wordLists");
+const config = require("./config");
 
 module.exports = {
   getFirstWordLowercase(string) {
@@ -71,5 +72,15 @@ module.exports = {
   },
   stripAlphaNum(text) {
     return text.replace(/\W/g, "");
+  },
+  getRandomReplyFromCollection(collectionName) {
+    if (collectionName in config.replyCollections) {
+      const thisCollection = config.replyCollections[collectionName];
+      return thisCollection[
+        module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })
+      ];
+    } else {
+      console.error(`No collection name found for ${collectionName}`);
+    }
   },
 };
