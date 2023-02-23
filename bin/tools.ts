@@ -3,7 +3,7 @@ import { config } from "./config";
 export const getFirstWordLowercase = ({ text }: { text: string }): string => {
   const stringArray = text.toLowerCase().split(" ");
   // drop any punctuation attached to the first word
-  return module.exports.stripAlphaNum(stringArray[0]);
+  return stripAlphaNum({ text: stringArray[0] });
 };
 
 export const removeFirstWord = ({ text }: { text: string }): string => {
@@ -41,8 +41,8 @@ export const isVowel = ({ character }: { character: string }): boolean => {
 };
 
 export const beastieBoysify = ({ text }: { text: string }): string => {
-  const capitalizeRand = module.exports.getRandomInt({ min: 3, max: 10 });
-  const exclamationPointsRand = module.exports.getRandomInt({
+  const capitalizeRand = getRandomInt({ min: 3, max: 10 });
+  const exclamationPointsRand = getRandomInt({
     min: 0,
     max: 10,
   });
@@ -54,11 +54,11 @@ export const beastieBoysify = ({ text }: { text: string }): string => {
   }
   // capitalize
   if (capitalizeRand > 5) {
-    beastieReply = module.exports.moreVowels(beastieReply);
+    beastieReply = moreVowels({ text: beastieReply });
     beastieReply = beastieReply.toUpperCase();
   }
   // strip non alphanum
-  beastieReply = module.exports.stripAlphaNum(beastieReply);
+  beastieReply = stripAlphaNum({ text: beastieReply });
   // add exclamation points
   beastieReply += exclamationPoints;
   return beastieReply;
@@ -77,8 +77,8 @@ export const moreVowels = ({ text }: { text: string }): string => {
   let textArray = text.split("");
   for (let i: number = 0; i < text.length; i++) {
     let moreVowels: string = "";
-    if (module.exports.isVowel(text.charAt(i))) {
-      let extraRand: number = module.exports.getRandomInt({ min: 1, max: 10 });
+    if (isVowel({ character: text.charAt(i) })) {
+      let extraRand: number = getRandomInt({ min: 1, max: 10 });
       for (let j: number = 1; j <= extraRand; j++) {
         moreVowels += text.charAt(i);
         textArray.splice(i, 1, moreVowels);
@@ -100,7 +100,7 @@ export const getRandomReplyFromCollection = ({
   if (collectionName in config.replyCollections) {
     const thisCollection = config.replyCollections[collectionName];
     return thisCollection[
-      module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })
+      getRandomInt({ min: 0, max: thisCollection.length - 1 })
     ];
   } else {
     return "";

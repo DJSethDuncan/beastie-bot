@@ -12,6 +12,18 @@ interface TriggerWordHandlerType {
   [key: string]: ({ message }: BotHandlerProps) => Promise<string>;
 }
 
+interface MessagePayloadType {
+  channel: {
+    name: string;
+    type: string;
+  };
+  author: {
+    username: string;
+    id: string;
+  };
+  content: string;
+}
+
 /*
   this object holds trigger words and their respective handlers
   handler functions should go in the ./bin/handlers file
@@ -29,7 +41,7 @@ client.once("ready", (): void => {
 
 client.on("message", async (messagePayload: any): Promise<void> => {
   try {
-    const { channel, author, content } = messagePayload;
+    const { channel, author, content }: MessagePayloadType = messagePayload;
     let response = "";
 
     if (config.ignoreUsers.includes(author.id)) return;
@@ -45,17 +57,19 @@ client.on("message", async (messagePayload: any): Promise<void> => {
       config.beSarcasticToUsers.includes(author.id)
     ) {
       // Handle direct message
-      response = sarcasm(content);
+      response = sarcasm({ text: content });
     } else {
       // Handle channel message
-      const messageFirstWord = getFirstWordLowercase(content);
+      const messageFirstWord = getFirstWordLowercase({ text: content });
       // check if the first word of the message matches a key in the triggerWordHandler object
       if (Object.keys(triggerWordHandler).includes(messageFirstWord)) {
         const processMessage = triggerWordHandler[messageFirstWord];
-        response = await processMessage({ message: removeFirstWord(content) });
+        response = await processMessage({
+          message: removeFirstWord({ text: content }),
+        });
       } else {
         // default to generic message parsing
-        response = genericHandler(content);
+        response = genericHandler({ message: content });
       }
     }
 

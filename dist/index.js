@@ -63,18 +63,20 @@ client.on("message", function (messagePayload) { return __awaiter(void 0, void 0
                 console.log("New message from ".concat(author.username, " (author.id: ").concat(author.id, ") (channel: ").concat((_a = channel.name) !== null && _a !== void 0 ? _a : "DM", "): ").concat(content));
                 if (!(channel.type === "dm" ||
                     config_1.config.beSarcasticToUsers.includes(author.id))) return [3, 1];
-                response = (0, tools_1.sarcasm)(content);
+                response = (0, tools_1.sarcasm)({ text: content });
                 return [3, 4];
             case 1:
-                messageFirstWord = (0, tools_1.getFirstWordLowercase)(content);
+                messageFirstWord = (0, tools_1.getFirstWordLowercase)({ text: content });
                 if (!Object.keys(triggerWordHandler).includes(messageFirstWord)) return [3, 3];
                 processMessage = triggerWordHandler[messageFirstWord];
-                return [4, processMessage({ message: (0, tools_1.removeFirstWord)(content) })];
+                return [4, processMessage({
+                        message: (0, tools_1.removeFirstWord)({ text: content }),
+                    })];
             case 2:
                 response = _b.sent();
                 return [3, 4];
             case 3:
-                response = (0, handlers_1.genericHandler)(content);
+                response = (0, handlers_1.genericHandler)({ message: content });
                 _b.label = 4;
             case 4:
                 if (response && process.env.ENVIRONMENT === "prod") {

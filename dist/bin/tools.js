@@ -5,7 +5,7 @@ var config_1 = require("./config");
 var getFirstWordLowercase = function (_a) {
     var text = _a.text;
     var stringArray = text.toLowerCase().split(" ");
-    return module.exports.stripAlphaNum(stringArray[0]);
+    return (0, exports.stripAlphaNum)({ text: stringArray[0] });
 };
 exports.getFirstWordLowercase = getFirstWordLowercase;
 var removeFirstWord = function (_a) {
@@ -34,8 +34,8 @@ var isVowel = function (_a) {
 exports.isVowel = isVowel;
 var beastieBoysify = function (_a) {
     var text = _a.text;
-    var capitalizeRand = module.exports.getRandomInt({ min: 3, max: 10 });
-    var exclamationPointsRand = module.exports.getRandomInt({
+    var capitalizeRand = (0, exports.getRandomInt)({ min: 3, max: 10 });
+    var exclamationPointsRand = (0, exports.getRandomInt)({
         min: 0,
         max: 10,
     });
@@ -46,10 +46,10 @@ var beastieBoysify = function (_a) {
         exclamationPoints += "!";
     }
     if (capitalizeRand > 5) {
-        beastieReply = module.exports.moreVowels(beastieReply);
+        beastieReply = (0, exports.moreVowels)({ text: beastieReply });
         beastieReply = beastieReply.toUpperCase();
     }
-    beastieReply = module.exports.stripAlphaNum(beastieReply);
+    beastieReply = (0, exports.stripAlphaNum)({ text: beastieReply });
     beastieReply += exclamationPoints;
     return beastieReply;
 };
@@ -69,8 +69,8 @@ var moreVowels = function (_a) {
     var textArray = text.split("");
     for (var i = 0; i < text.length; i++) {
         var moreVowels_1 = "";
-        if (module.exports.isVowel(text.charAt(i))) {
-            var extraRand = module.exports.getRandomInt({ min: 1, max: 10 });
+        if ((0, exports.isVowel)({ character: text.charAt(i) })) {
+            var extraRand = (0, exports.getRandomInt)({ min: 1, max: 10 });
             for (var j = 1; j <= extraRand; j++) {
                 moreVowels_1 += text.charAt(i);
                 textArray.splice(i, 1, moreVowels_1);
@@ -89,7 +89,7 @@ var getRandomReplyFromCollection = function (_a) {
     var collectionName = _a.collectionName;
     if (collectionName in config_1.config.replyCollections) {
         var thisCollection = config_1.config.replyCollections[collectionName];
-        return thisCollection[module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })];
+        return thisCollection[(0, exports.getRandomInt)({ min: 0, max: thisCollection.length - 1 })];
     }
     else {
         return "";
