@@ -60,10 +60,14 @@ bot: hOw ArE yOu?
 
 ## How to work on this repo
 
-As long as you have node installed, this should work without you having to do anything special.
+As long as you have NodeJS installed, this should work without you having to do anything special. I built this using LTS (v18).
+
+Note: This bot will work if it's running, so if you just spin it up on your own computer or a Raspberry Pi or something it'll respond in your Discord as long as you've configured your Discord server to work w/ a bot and put the key in the `.env` file.
 
 - `git clone`
 - `npm i`
 - fill in `.env` using the keys shown in `.env.example`
-- `npm run dev` OR
-- deploy somewhere useful && `npm start`
+- `npm run dev` OR `npm start`
+
+
+Note: If you run `npm run dev` the bot will run but will _suppress_ responses so they don't go to your Discord. They will log in the console so you can see what the responses would be. This prevents your development-environment from double-posting to an active Discord server if you already have a version of this bot running "in production."
