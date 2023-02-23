@@ -1,4 +1,21 @@
-module.exports = {
+export interface WordCollectionType {
+  [key: string]: string[];
+}
+
+interface ReplyCollectionType {
+  rateLimit: string[];
+  [key: string]: string[];
+}
+
+interface ConfigType {
+  ignoreUsers: string[];
+  beSarcasticToUsers: string[];
+  wordCollections: WordCollectionType;
+  replyCollections: ReplyCollectionType;
+  helpText: string;
+}
+
+export const config: ConfigType = {
   ignoreUsers: ["804419214894301227"],
   beSarcasticToUsers: [],
   wordCollections: {

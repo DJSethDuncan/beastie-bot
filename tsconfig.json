@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "target": "es5",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "baseUrl": "./types",
+    "outDir": "./dist"
+  },
+  "include": ["/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
