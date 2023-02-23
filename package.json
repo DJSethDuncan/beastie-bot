@@ -16,6 +16,7 @@
     "typescript": "^4.9.5"
   },
   "scripts": {
+    "tsc": "tsc",
     "build": "rm -rf ./dist && tsc",
     "buildWatch": "rm -rf ./dist && tsc --watch",
     "start": "npm run build && node dist/index.js",
