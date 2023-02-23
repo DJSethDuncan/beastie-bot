@@ -25,9 +25,11 @@ Each "handler" function takes a Discord message payload and does something with 
 
 #### Trigger word handler
 
-The `triggerWordHandler` object in `index.js` is a key/value pair that should match a trigger word with a handler function. A 'trigger word' is the first word of a Discord message. The primary example of this is the `bot [query]` situation.
+The `triggerWordHandler` object in `bin/processMessage.ts` is a key/value pair that should match a trigger word with a handler function. A 'trigger word' is the first word of a Discord message. The primary example of this is the `bot [query]` situation.
 
 When `client.on("message"),...` is fired, it will check if the first word of the message matches a key in `triggerWordHandler` and, if so, pass the Discord message to the associated handler.
+
+Let's say you wanted to add a new trigger word. Say you wanted to do something specific whenever a user typed `jarvis ...` -- you would just need to modify the `triggerWordHandler` object to include `jarvis: someHandlerFunction` and it would (should) automatically work.
 
 #### Generic handler
 
@@ -35,19 +37,19 @@ This is the last handler in the chain. If nothing has triggered yet, this handle
 
 ### Reply collections
 
-You can use the `getRandomReplyFromCollection(someCollectionName)` function in `/bin/tools.js` to get a random reply from an array. Whatever string you pass to this function must match a key-name in the `replyCollections` object in `/bin/config.js`.
+You can use the `getRandomReplyFromCollection(someCollectionName)` function in `/bin/tools.ts` to get a random reply from an array. Whatever string you pass to this function must match a key-name in the `replyCollections` object in `/bin/config.ts`.
 
 ### Word collections
 
-You can use `hasWordInWordCollection({messageContent: '', wordCollection: ''})` where `messageContent` is some string you want to search through, and `wordCollection` is a string that matches a key in the `wordCollections` object in `/bin/config.js`
+You can use `hasWordInWordCollection({messageContent: '', wordCollection: ''})` where `messageContent` is some string you want to search through, and `wordCollection` is a string that matches a key in the `wordCollections` object in `/bin/config.ts`
 
 ### Ignore users
 
-If you enter a Discord user Id into the `ignoreUsers` array in `/bin/config.js` any messages from that user will be ignored. This repo includes the userId associated with this bot on my own Discord server, but you can swap it out with whatever you want.
+If you enter a Discord user Id into the `ignoreUsers` array in `/bin/config.ts` any messages from that user will be ignored. This repo includes the userId associated with this bot on my own Discord server, but you can swap it out with whatever you want.
 
 ### Be sarcastic to users
 
-An array of user Ids in `beSarcasticToUsers` in `/bin/config.js` -- any users in this array will get a spongebob-meme style alternating caps reply of whatever they asked the bot.
+An array of user Ids in `beSarcasticToUsers` in `/bin/config.ts` -- any users in this array will get a spongebob-meme style alternating caps reply of whatever they asked the bot.
 
 Ex:
 

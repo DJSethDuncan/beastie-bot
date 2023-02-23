@@ -1,15 +1,11 @@
 import { config } from "./config";
+import type { TextModifierType } from "../types";
 
-export const getFirstWordLowercase = ({ text }: { text: string }): string => {
-  const stringArray = text.toLowerCase().split(" ");
-  // drop any punctuation attached to the first word
-  return stripAlphaNum({ text: stringArray[0] });
+export const isVowel = ({ character }: { character: string }): boolean => {
+  return ["a", "e", "i", "o", "u"].indexOf(character.toLowerCase()) !== -1;
 };
 
-export const removeFirstWord = ({ text }: { text: string }): string => {
-  return text.split(" ").slice(1).join(" ");
-};
-
+/* Collection Related Functions */
 export const hasWordInWordCollection = ({
   messageContent,
   wordCollectionName,
@@ -36,11 +32,34 @@ export const getRandomInt = ({
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const isVowel = ({ character }: { character: string }): boolean => {
-  return ["a", "e", "i", "o", "u"].indexOf(character.toLowerCase()) !== -1;
+export const getRandomReplyFromCollection = ({
+  collectionName,
+}: {
+  collectionName: string;
+}): string => {
+  if (collectionName in config.replyCollections) {
+    const thisCollection = config.replyCollections[collectionName];
+    return thisCollection[
+      getRandomInt({ min: 0, max: thisCollection.length - 1 })
+    ];
+  } else {
+    console.error(`No collection name found for ${collectionName}`);
+    return "";
+  }
 };
 
-export const beastieBoysify = ({ text }: { text: string }): string => {
+/* Text Modifying Functions */
+export const getFirstWordLowercase = ({ text }: TextModifierType): string => {
+  const stringArray = text.toLowerCase().split(" ");
+  // drop any punctuation attached to the first word
+  return stripAlphaNum({ text: stringArray[0] });
+};
+
+export const removeFirstWord = ({ text }: TextModifierType): string => {
+  return text.split(" ").slice(1).join(" ");
+};
+
+export const beastieBoysify = ({ text }: TextModifierType): string => {
   const capitalizeRand = getRandomInt({ min: 3, max: 10 });
   const exclamationPointsRand = getRandomInt({
     min: 0,
@@ -64,7 +83,7 @@ export const beastieBoysify = ({ text }: { text: string }): string => {
   return beastieReply;
 };
 
-export const sarcasm = ({ text }: { text: string }): string => {
+export const sarcasm = ({ text }: TextModifierType): string => {
   return text
     .split("")
     .map((item, index) =>
@@ -73,7 +92,7 @@ export const sarcasm = ({ text }: { text: string }): string => {
     .join("");
 };
 
-export const moreVowels = ({ text }: { text: string }): string => {
+export const moreVowels = ({ text }: TextModifierType): string => {
   let textArray = text.split("");
   for (let i: number = 0; i < text.length; i++) {
     let moreVowels: string = "";
@@ -88,22 +107,6 @@ export const moreVowels = ({ text }: { text: string }): string => {
   return textArray.join();
 };
 
-export const stripAlphaNum = ({ text }: { text: string }): string => {
+export const stripAlphaNum = ({ text }: TextModifierType): string => {
   return text.replace(/\W/g, "");
-};
-
-export const getRandomReplyFromCollection = ({
-  collectionName,
-}: {
-  collectionName: string;
-}): string => {
-  if (collectionName in config.replyCollections) {
-    const thisCollection = config.replyCollections[collectionName];
-    return thisCollection[
-      getRandomInt({ min: 0, max: thisCollection.length - 1 })
-    ];
-  } else {
-    return "";
-    console.error(`No collection name found for ${collectionName}`);
-  }
 };

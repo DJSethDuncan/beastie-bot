@@ -7,22 +7,15 @@ import {
 } from "./tools";
 import { chatgpt, dalle } from "./openai";
 import { config } from "./config";
+import type { BotHandlerProps, GenericHandlerProps } from "../types";
 
 let lastMessageTime: number = Date.now();
 
-export interface BotHandlerProps {
-  message: string;
-}
-
-interface GenericHandlerProps {
-  message: string;
-}
-
 export const botHandler = async ({
   message,
-}: BotHandlerProps): Promise<string> => {
+}: BotHandlerProps): Promise<string | undefined> => {
   const botMessageFirstWord = getFirstWordLowercase({ text: message });
-  let response: string = "";
+  let response;
   if (message == "help") {
     response = config.helpText;
   } else {
@@ -55,7 +48,7 @@ export const botHandler = async ({
     }
   }
 
-  return response;
+  return response || undefined;
 };
 
 export const genericHandler = ({ message }: GenericHandlerProps): string => {

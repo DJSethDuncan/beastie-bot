@@ -12,7 +12,7 @@ export const chatgpt = async ({
 }: {
   query: string;
   model?: "davinci" | "ada" | "curie";
-}): Promise<string> => {
+}): Promise<string | undefined> => {
   const models = {
     davinci: "text-davinci-003",
     ada: "text-ada-001",
@@ -26,13 +26,17 @@ export const chatgpt = async ({
       temperature: 0.8,
     });
     return openAIresponse.data.choices[0].text;
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return "No.";
   }
 };
 
-export const dalle = async ({ query }: { query: string }): Promise<string> => {
+export const dalle = async ({
+  query,
+}: {
+  query: string;
+}): Promise<string | undefined> => {
   try {
     const openAIImageResponse = await openai.createImage({
       prompt: query,
@@ -40,8 +44,8 @@ export const dalle = async ({ query }: { query: string }): Promise<string> => {
       size: "512x512",
     });
     return openAIImageResponse.data.data[0].url;
-  } catch (e) {
-    console.error(e);
+  } catch (error) {
+    console.error(error);
     return "No.";
   }
 };

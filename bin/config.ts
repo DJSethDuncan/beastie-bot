@@ -1,6 +1,4 @@
-export interface WordCollectionType {
-  [key: string]: string[];
-}
+import type { WordCollectionType } from "../types";
 
 interface ReplyCollectionType {
   rateLimit: string[];
