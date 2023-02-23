@@ -1,10 +1,10 @@
-import OpenAI from "openai";
-const configuration = new OpenAI.Configuration({
+import { Configuration, OpenAIApi } from "openai";
+const configuration = new Configuration({
   organization: process.env.ORG_ID,
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai = new OpenAI.OpenAIApi(configuration);
+const openai = new OpenAIApi(configuration);
 
 export const chatgpt = async ({
   query,
@@ -12,7 +12,7 @@ export const chatgpt = async ({
 }: {
   query: string;
   model?: "davinci" | "ada" | "curie";
-}) => {
+}): Promise<string> => {
   const models = {
     davinci: "text-davinci-003",
     ada: "text-ada-001",
@@ -32,7 +32,7 @@ export const chatgpt = async ({
   }
 };
 
-export const dalle = async ({ query }: { query: string }) => {
+export const dalle = async ({ query }: { query: string }): Promise<string> => {
   try {
     const openAIImageResponse = await openai.createImage({
       prompt: query,

@@ -36,60 +36,70 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var dotenv = require("dotenv");
-dotenv.config();
-var Discord = require("discord.js");
-var client = new Discord.Client();
-var handlers_1 = require("./bin/handlers");
-var tools_1 = require("./bin/tools");
-var config_1 = require("./bin/config");
-var triggerWordHandler = {
-    bot: handlers_1.botHandler,
-};
-client.once("ready", function () {
-    console.log("BeastieBot is about to drop");
+exports.dalle = exports.chatgpt = void 0;
+var openai_1 = require("openai");
+var configuration = new openai_1.Configuration({
+    organization: process.env.ORG_ID,
+    apiKey: process.env.OPENAI_API_KEY,
 });
-client.on("message", function (messagePayload) { return __awaiter(void 0, void 0, void 0, function () {
-    var channel, author, content, response, messageFirstWord, processMessage, error_1;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                _b.trys.push([0, 5, , 6]);
-                channel = messagePayload.channel, author = messagePayload.author, content = messagePayload.content;
-                response = "";
-                if (config_1.config.ignoreUsers.includes(author.id))
-                    return [2];
-                console.log("New message from ".concat(author.username, " (author.id: ").concat(author.id, ") (channel: ").concat((_a = channel.name) !== null && _a !== void 0 ? _a : "DM", "): ").concat(content));
-                if (!(channel.type === "dm" ||
-                    config_1.config.beSarcasticToUsers.includes(author.id))) return [3, 1];
-                response = (0, tools_1.sarcasm)(content);
-                return [3, 4];
-            case 1:
-                messageFirstWord = (0, tools_1.getFirstWordLowercase)(content);
-                if (!Object.keys(triggerWordHandler).includes(messageFirstWord)) return [3, 3];
-                processMessage = triggerWordHandler[messageFirstWord];
-                return [4, processMessage({ message: (0, tools_1.removeFirstWord)(content) })];
-            case 2:
-                response = _b.sent();
-                return [3, 4];
-            case 3:
-                response = (0, handlers_1.genericHandler)(content);
-                _b.label = 4;
-            case 4:
-                if (response && process.env.ENVIRONMENT === "prod") {
-                    messagePayload.channel.send(response);
-                }
-                else {
-                    console.log("DEV Bot Response: ", response);
-                }
-                return [3, 6];
-            case 5:
-                error_1 = _b.sent();
-                console.error(error_1);
-                return [3, 6];
-            case 6: return [2];
-        }
+var openai = new openai_1.OpenAIApi(configuration);
+var chatgpt = function (_a) {
+    var query = _a.query, _b = _a.model, model = _b === void 0 ? "curie" : _b;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var models, openAIresponse, e_1;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
+                case 0:
+                    models = {
+                        davinci: "text-davinci-003",
+                        ada: "text-ada-001",
+                        curie: "text-curie-001",
+                    };
+                    _c.label = 1;
+                case 1:
+                    _c.trys.push([1, 3, , 4]);
+                    return [4, openai.createCompletion({
+                            model: models[model],
+                            prompt: query,
+                            max_tokens: 500,
+                            temperature: 0.8,
+                        })];
+                case 2:
+                    openAIresponse = _c.sent();
+                    return [2, openAIresponse.data.choices[0].text];
+                case 3:
+                    e_1 = _c.sent();
+                    console.error(e_1);
+                    return [2, "No."];
+                case 4: return [2];
+            }
+        });
     });
-}); });
-client.login(process.env.TOKEN);
+};
+exports.chatgpt = chatgpt;
+var dalle = function (_a) {
+    var query = _a.query;
+    return __awaiter(void 0, void 0, void 0, function () {
+        var openAIImageResponse, e_2;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    _b.trys.push([0, 2, , 3]);
+                    return [4, openai.createImage({
+                            prompt: query,
+                            n: 1,
+                            size: "512x512",
+                        })];
+                case 1:
+                    openAIImageResponse = _b.sent();
+                    return [2, openAIImageResponse.data.data[0].url];
+                case 2:
+                    e_2 = _b.sent();
+                    console.error(e_2);
+                    return [2, "No."];
+                case 3: return [2];
+            }
+        });
+    });
+};
+exports.dalle = dalle;

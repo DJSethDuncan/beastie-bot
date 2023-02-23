@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genericHandler = exports.botHandler = void 0;
 var tools_1 = require("./tools");
-"./openai";
+var openai_1 = require("./openai");
 var config_1 = require("./config");
 var lastMessageTime = Date.now();
 var botHandler = function (_a) {
@@ -67,25 +67,25 @@ var botHandler = function (_a) {
                         case "smartly": return [3, 7];
                     }
                     return [3, 9];
-                case 3: return [4, openai.dalle((0, tools_1.removeFirstWord)({ text: message }))];
+                case 3: return [4, (0, openai_1.dalle)({ query: (0, tools_1.removeFirstWord)({ text: message }) })];
                 case 4:
                     response = _c.sent();
                     return [3, 11];
-                case 5: return [4, openai.chatgpt({
+                case 5: return [4, (0, openai_1.chatgpt)({
                         query: message,
                         model: "ada",
                     })];
                 case 6:
                     response = _c.sent();
                     _c.label = 7;
-                case 7: return [4, openai.chatgpt({
+                case 7: return [4, (0, openai_1.chatgpt)({
                         query: message,
                         model: "davinci",
                     })];
                 case 8:
                     response = _c.sent();
                     return [3, 11];
-                case 9: return [4, openai.chatgpt({
+                case 9: return [4, (0, openai_1.chatgpt)({
                         query: message,
                     })];
                 case 10:
@@ -104,6 +104,9 @@ var genericHandler = function (_a) {
         wordCollectionName: "beastie",
     })) {
         return (0, tools_1.beastieBoysify)({ text: message });
+    }
+    else {
+        return "";
     }
 };
 exports.genericHandler = genericHandler;

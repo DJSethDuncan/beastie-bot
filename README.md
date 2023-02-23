@@ -10,6 +10,7 @@ Example:
 
 - uses [discord.js](https://discordjs.guide/)
 - uses [openAI](https://openai.com/api/)
+- uses TypeScript
 
 ## Features
 
@@ -56,6 +57,8 @@ bot: hOw ArE yOu?
 ```
 
 ## How to work on this repo
+
+As long as you have node installed, this should work without you having to do anything special.
 
 - `git clone`
 - `npm i`

@@ -1,12 +1,12 @@
-import { config } from "config";
+import { config } from "./config";
 
-export const getFirstWordLowercase = ({ text }: { text: string }) => {
+export const getFirstWordLowercase = ({ text }: { text: string }): string => {
   const stringArray = text.toLowerCase().split(" ");
   // drop any punctuation attached to the first word
   return module.exports.stripAlphaNum(stringArray[0]);
 };
 
-export const removeFirstWord = ({ text }: { text: string }) => {
+export const removeFirstWord = ({ text }: { text: string }): string => {
   return text.split(" ").slice(1).join(" ");
 };
 
@@ -16,7 +16,7 @@ export const hasWordInWordCollection = ({
 }: {
   messageContent: string;
   wordCollectionName: string;
-}) => {
+}): boolean => {
   const messageContentArray = messageContent.toLowerCase().split(" ");
   const intersection = config.wordCollections[wordCollectionName].filter(
     (element: string) => messageContentArray.includes(element)
@@ -24,17 +24,23 @@ export const hasWordInWordCollection = ({
   return !!intersection.length;
 };
 
-export const getRandomInt = ({ min, max }: { min: number; max: number }) => {
+export const getRandomInt = ({
+  min,
+  max,
+}: {
+  min: number;
+  max: number;
+}): number => {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-export const isVowel = ({ character }: { character: string }) => {
+export const isVowel = ({ character }: { character: string }): boolean => {
   return ["a", "e", "i", "o", "u"].indexOf(character.toLowerCase()) !== -1;
 };
 
-export const beastieBoysify = ({ text }: { text: string }) => {
+export const beastieBoysify = ({ text }: { text: string }): string => {
   const capitalizeRand = module.exports.getRandomInt({ min: 3, max: 10 });
   const exclamationPointsRand = module.exports.getRandomInt({
     min: 0,
@@ -58,7 +64,7 @@ export const beastieBoysify = ({ text }: { text: string }) => {
   return beastieReply;
 };
 
-export const sarcasm = ({ text }: { text: string }) => {
+export const sarcasm = ({ text }: { text: string }): string => {
   return text
     .split("")
     .map((item, index) =>
@@ -67,7 +73,7 @@ export const sarcasm = ({ text }: { text: string }) => {
     .join("");
 };
 
-export const moreVowels = ({ text }: { text: string }) => {
+export const moreVowels = ({ text }: { text: string }): string => {
   let textArray = text.split("");
   for (let i: number = 0; i < text.length; i++) {
     let moreVowels: string = "";
@@ -82,7 +88,7 @@ export const moreVowels = ({ text }: { text: string }) => {
   return textArray.join();
 };
 
-export const stripAlphaNum = ({ text }: { text: string }) => {
+export const stripAlphaNum = ({ text }: { text: string }): string => {
   return text.replace(/\W/g, "");
 };
 
@@ -90,13 +96,14 @@ export const getRandomReplyFromCollection = ({
   collectionName,
 }: {
   collectionName: string;
-}) => {
+}): string => {
   if (collectionName in config.replyCollections) {
     const thisCollection = config.replyCollections[collectionName];
     return thisCollection[
       module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })
     ];
   } else {
+    return "";
     console.error(`No collection name found for ${collectionName}`);
   }
 };

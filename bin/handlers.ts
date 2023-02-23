@@ -58,7 +58,7 @@ export const botHandler = async ({
   return response;
 };
 
-export const genericHandler = ({ message }: GenericHandlerProps) => {
+export const genericHandler = ({ message }: GenericHandlerProps): string => {
   if (
     hasWordInWordCollection({
       messageContent: message,

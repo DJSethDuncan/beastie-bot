@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getRandomReplyFromCollection = exports.stripAlphaNum = exports.moreVowels = exports.sarcasm = exports.beastieBoysify = exports.isVowel = exports.getRandomInt = exports.hasWordInWordCollection = exports.removeFirstWord = exports.getFirstWordLowercase = void 0;
-var config_1 = require("config");
+var config_1 = require("./config");
 var getFirstWordLowercase = function (_a) {
     var text = _a.text;
     var stringArray = text.toLowerCase().split(" ");
@@ -92,6 +92,7 @@ var getRandomReplyFromCollection = function (_a) {
         return thisCollection[module.exports.getRandomInt({ min: 0, max: thisCollection.length - 1 })];
     }
     else {
+        return "";
         console.error("No collection name found for ".concat(collectionName));
     }
 };
