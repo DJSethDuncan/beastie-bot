@@ -11,9 +11,11 @@ client.once("ready", (): void => {
 client.on("message", async (messagePayload: any): Promise<void> => {
   try {
     const response = await processMessage(messagePayload);
-    response && process.env.ENVIRONMENT === "prod"
-      ? messagePayload.channel.send(response)
-      : console.log("DEV Bot Response: ", response);
+    if (process.env.ENVIRONMENT === "prod") {
+      response ? messagePayload.channel.send(response) : null;
+    } else {
+      console.log("DEV Bot Response: ", response);
+    }
   } catch (error) {
     console.error(error);
   }
