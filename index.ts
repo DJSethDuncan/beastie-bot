@@ -1,10 +1,16 @@
-const dotenv = require("dotenv");
+import * as dotenv from "dotenv";
 dotenv.config();
-const Discord = require("discord.js");
+import * as Discord from "discord.js";
 const client = new Discord.Client();
-const handlers = require("./bin/handlers");
-const tools = require("./bin/tools");
-const config = require("./bin/config");
+import { botHandler, genericHandler } from "./bin/handlers";
+import { sarcasm, getFirstWordLowercase, removeFirstWord } from "./bin/tools";
+import { config } from "./bin/config";
+
+import type { BotHandlerProps } from "./bin/handlers";
+
+interface TriggerWordHandlerType {
+  [key: string]: ({ message }: BotHandlerProps) => Promise<string>;
+}
 
 /*
   this object holds trigger words and their respective handlers
@@ -13,20 +19,20 @@ const config = require("./bin/config");
   ex: { triggerWord: handlerFunction }
 */
 
-const triggerWordHandler = {
-  bot: handlers.botHandler,
+const triggerWordHandler: TriggerWordHandlerType = {
+  bot: botHandler,
 };
 
-client.once("ready", () => {
+client.once("ready", (): void => {
   console.log("BeastieBot is about to drop");
 });
 
-client.on("message", async (messagePayload) => {
+client.on("message", async (messagePayload: any): Promise<void> => {
   try {
     const { channel, author, content } = messagePayload;
     let response = "";
 
-    if (config.ignoreUsers.includes(author.id)) return null;
+    if (config.ignoreUsers.includes(author.id)) return;
 
     console.log(
       `New message from ${author.username} (author.id: ${
@@ -39,17 +45,17 @@ client.on("message", async (messagePayload) => {
       config.beSarcasticToUsers.includes(author.id)
     ) {
       // Handle direct message
-      response = tools.sarcasm(content);
+      response = sarcasm(content);
     } else {
       // Handle channel message
-      const messageFirstWord = tools.getFirstWordLowercase(content);
+      const messageFirstWord = getFirstWordLowercase(content);
       // check if the first word of the message matches a key in the triggerWordHandler object
       if (Object.keys(triggerWordHandler).includes(messageFirstWord)) {
         const processMessage = triggerWordHandler[messageFirstWord];
-        response = await processMessage(tools.removeFirstWord(content));
+        response = await processMessage({ message: removeFirstWord(content) });
       } else {
         // default to generic message parsing
-        response = await handlers.genericHandler(content);
+        response = genericHandler(content);
       }
     }
 
