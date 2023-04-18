@@ -29,7 +29,8 @@ export const chatgpt = async ({
     const messageContent = openAIresponse.data.choices[0].message
       ? openAIresponse.data.choices[0].message.content
       : undefined;
-    return messageContent?.replace("As an AI language model, ", "");
+    const regEx = new RegExp(/as an ai language model[, ]?/, "i");
+    return messageContent?.replace(regEx, "");
   } catch (error) {
     console.error(error);
     return "No.";
