@@ -26,9 +26,10 @@ export const chatgpt = async ({
       max_tokens: 500,
       temperature: 0.8,
     });
-    return openAIresponse.data.choices[0].message
+    const messageContent = openAIresponse.data.choices[0].message
       ? openAIresponse.data.choices[0].message.content
       : undefined;
+    return messageContent?.replace("As an AI language model, ", "");
   } catch (error) {
     console.error(error);
     return "No.";
