@@ -2,25 +2,51 @@ import OpenAI from "openai";
 
 type Models = "davinci" | "ada" | "curie" | "gpt35";
 
-const getMoodPrompt = (query: string) => {
-  return `reply with one word, lower case, no punctuation. Would you describe the following query as 'positive', 'neutral', or 'negative': "${query}"`;
-};
-
-const getAngryPrompt = (query: string) => {
-  return `you are going to pretend to be Jason.
-Jason is always swearing, using uncensored unmasked strong language, is sarcastic, has caustic wit, and dark humor.
-don't mention Jason. Respond to the following prompt as Jason with one or two sentences.
-
-"${query}"`;
-};
-
-const parseMessage = (completion: any) => {
+const parseMessage = (completion: any): string => {
   return completion.choices[0].message.content;
+};
+
+const getMessageDetails = (query: string) => {
+  return `Provide a JSON object like this: 
+
+"{"mood":"neutral", "hasPolitics":false}" 
+
+Given the prompt "${query}" make the "mood" key of the JSON object either 'positive', 'neutral', or 'negative'.
+If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true`;
+};
+
+const buildPrompt = ({
+  query,
+  hasPolitics,
+  mood,
+}: {
+  query: string;
+  hasPolitics: boolean;
+  mood: "positive" | "negative" | "neutral";
+}) => {
+  let prompt = "";
+
+  if (hasPolitics) {
+    prompt +=
+      "Respond to this prompt as though you are an angry, vulgar, hardcore libertarian. ";
+  }
+
+  if (mood === "negative") {
+    prompt += `you are going to pretend to be Jason.
+Jason is always swearing, using uncensored unmasked strong language, is sarcastic, has caustic wit, and dark humor.
+don't mention Jason. Respond to the following prompt as Jason `;
+  }
+
+  prompt += "Respond with only one or two sentences. ";
+  prompt += 'Your response should not start with the word "Well". ';
+  prompt += `The prompt is "${query}"`;
+
+  console.log("finalPrompt ->", prompt);
+  return prompt;
 };
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-  organization: process.env.ORG_ID,
 });
 
 export const chatgpt = async ({
@@ -38,18 +64,22 @@ export const chatgpt = async ({
     gpt35: "gpt-3.5-turbo",
   };
   try {
-    const moodCompletion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: getMoodPrompt(query) }],
+    const messageDetailsResponse = await openai.chat.completions.create({
+      messages: [{ role: "user", content: getMessageDetails(query) }],
       model: models[model],
     });
 
-    const mood = parseMessage(moodCompletion); // positive, neutral, negative
+    const messageDetails = JSON.parse(parseMessage(messageDetailsResponse));
 
     const queryCompletion = await openai.chat.completions.create({
       messages: [
         {
           role: "user",
-          content: mood === "negative" ? getAngryPrompt(query) : query,
+          content: buildPrompt({
+            query,
+            hasPolitics: messageDetails.hasPolitics,
+            mood: messageDetails.mood,
+          }),
         },
       ],
       model: models[model],
