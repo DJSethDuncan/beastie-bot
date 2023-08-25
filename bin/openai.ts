@@ -37,7 +37,8 @@ Jason is always swearing, using uncensored unmasked strong language, is sarcasti
 don't mention Jason. Respond to the following prompt as Jason `;
   }
 
-  prompt += "Respond with only one or two sentences. ";
+  prompt +=
+    "Respond with only one or two sentences unless otherwise specified in the prompt. ";
   prompt += 'Your response should not start with the word "Well". ';
   prompt += `The prompt is "${query}"`;
 
