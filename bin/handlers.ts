@@ -39,7 +39,7 @@ export const botHandler = async ({
         case "smartly":
           response = await chatgpt({
             query: message,
-            model: "gpt",
+            model: "gpt35",
           });
           break;
         default:
