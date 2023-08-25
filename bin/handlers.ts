@@ -20,7 +20,10 @@ export const botHandler = async ({
     response = config.helpText;
   } else {
     let thisMessageTime: number = Date.now();
-    if (thisMessageTime - lastMessageTime < 10000) {
+    if (
+      thisMessageTime - lastMessageTime < 10000 &&
+      process.env.ENVIRONMENT !== "dev"
+    ) {
       response = getRandomReplyFromCollection({ collectionName: "rateLimit" });
     } else {
       lastMessageTime = Date.now();
