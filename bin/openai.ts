@@ -31,6 +31,7 @@ export const chatgpt = async ({
   model?: Models;
 }): Promise<string | null> => {
   const models = {
+    gpt: "gpt-3.5-turbo",
     davinci: "text-davinci-003",
     ada: "text-ada-001",
     curie: "text-curie-001",
