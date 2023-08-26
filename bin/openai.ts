@@ -1,6 +1,8 @@
 import OpenAI from "openai";
 
-type Models = "davinci" | "ada" | "curie" | "gpt35";
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 const parseMessage = (completion: any): string => {
   return completion.choices[0].message.content;
@@ -9,14 +11,14 @@ const parseMessage = (completion: any): string => {
 const getMessageDetails = (query: string) => {
   return `Provide a JSON object like this: 
 
-"{"mood":"neutral", "hasPolitics":false}" 
+  "{"mood":"neutral", "hasPolitics":false}" 
 
-Given the prompt "${query}" make the "mood" key of the JSON object either 'positive', 'neutral', or 'negative'.
-If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true
+  Given the prompt "${query}" make the "mood" key of the JSON object either 'positive', 'neutral', or 'negative'.
+  If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true
 
-Only choose "negative" if the question is mean-spirited or has vulgarity.
+  Only choose "negative" if the question is mean-spirited or has vulgarity.
 
-`;
+  `;
 };
 
 const buildPrompt = ({
@@ -32,46 +34,31 @@ const buildPrompt = ({
 
   if (hasPolitics) {
     prompt +=
-      "Respond to this prompt as though you are an angry, vulgar, hardcore libertarian. ";
+      "Respond to this prompt as though you are an angry, vulgar, hardcore libertarian.\n";
   }
 
   if (mood === "negative") {
     prompt += `you are going to pretend to be Jason.
-Jason is always swearing, using uncensored unmasked strong language, is sarcastic, has caustic wit, and dark humor.
-don't mention Jason. Respond to the following prompt as Jason `;
+    Jason is always swearing, using uncensored unmasked strong language, is sarcastic, has caustic wit, and dark humor.
+    don't mention Jason. Respond to the following prompt as Jason `;
   }
 
-  prompt +=
-    "Respond with only one or two sentences unless otherwise specified in the prompt. ";
-  prompt += 'Your response should not start with the word "Well". ';
+  prompt += `Respond with only one or two sentences unless otherwise specified in the prompt.\n`;
+  prompt += 'Your response should not start with the word "Well".\n';
   prompt += `The prompt is "${query}"`;
 
-  console.log("finalPrompt ->", prompt);
   return prompt;
 };
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
 export const chatgpt = async ({
   query,
-  model = "gpt35",
 }: {
   query: string;
-  model?: Models;
 }): Promise<string | null> => {
-  const models = {
-    gpt: "gpt-3.5-turbo",
-    davinci: "text-davinci-003",
-    ada: "text-ada-001",
-    curie: "text-curie-001",
-    gpt35: "gpt-3.5-turbo",
-  };
   try {
     const messageDetailsResponse = await openai.chat.completions.create({
       messages: [{ role: "user", content: getMessageDetails(query) }],
-      model: models[model],
+      model: "gpt-3.5-turbo",
     });
 
     const messageDetails = JSON.parse(parseMessage(messageDetailsResponse));
@@ -87,12 +74,10 @@ export const chatgpt = async ({
           }),
         },
       ],
-      model: models[model],
+      model: "gpt-3.5-turbo",
     });
 
-    const response = parseMessage(queryCompletion);
-
-    return response;
+    return parseMessage(queryCompletion);
   } catch (error) {
     console.error(error);
     return "No.";

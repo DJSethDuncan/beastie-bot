@@ -31,17 +31,6 @@ export const botHandler = async ({
         case "image":
           response = await dalle({ query: removeFirstWord({ text: message }) });
           break;
-        case "dumbly":
-          response = await chatgpt({
-            query: message,
-            model: "ada",
-          });
-        case "smartly":
-          response = await chatgpt({
-            query: message,
-            model: "gpt35",
-          });
-          break;
         default:
           response = await chatgpt({
             query: message,
