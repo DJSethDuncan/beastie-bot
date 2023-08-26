@@ -12,7 +12,11 @@ const getMessageDetails = (query: string) => {
 "{"mood":"neutral", "hasPolitics":false}" 
 
 Given the prompt "${query}" make the "mood" key of the JSON object either 'positive', 'neutral', or 'negative'.
-If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true`;
+If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true
+
+Only choose "negative" if the question is mean-spirited or has vulgarity.
+
+`;
 };
 
 const buildPrompt = ({
