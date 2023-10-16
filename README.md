@@ -71,3 +71,7 @@ Note: This bot will work if it's running, so if you just spin it up on your own 
 
 
 Note: If you run `npm run dev` the bot will run but will _suppress_ responses so they don't go to your Discord. They will log in the console so you can see what the responses would be. This prevents your development-environment from double-posting to an active Discord server if you already have a version of this bot running "in production."
+
+## Deployment
+
+Deployements are automatic whenever a new commit is made on `main`.
