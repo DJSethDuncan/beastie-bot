@@ -2,7 +2,12 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import * as Discord from "discord.js";
 const client = new Discord.Client();
+import * as Sentry from "@sentry/node";
 import { processMessage } from "./bin/processMessage";
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+});
 
 client.once("ready", (): void => {
   console.log("BeastieBot is about to drop");
