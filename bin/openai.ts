@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { getRandomReplyFromCollection } from "./tools";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -16,7 +17,7 @@ const getMessageDetails = (query: string) => {
   Given the prompt "${query}" make the "mood" key of the JSON object either 'positive', 'neutral', or 'negative'.
   If the prompt includes discussion about politics, make the "hasPolitics" key of the JSON object the boolean value true
 
-  Only choose "negative" if the question is mean-spirited or has vulgarity.
+  Only choose "negative" if the question is rude, impolite, inconsiderate, or has vulgarity.
 
   `;
 };
@@ -80,7 +81,7 @@ export const chatgpt = async ({
     return parseMessage(queryCompletion);
   } catch (error) {
     console.error(error);
-    return "No.";
+    return getRandomReplyFromCollection({ collectionName: "error" });
   }
 };
 
