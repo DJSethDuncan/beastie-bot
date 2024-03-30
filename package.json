@@ -4,6 +4,9 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@sentry/cli": "^2.31.0",
+    "@sentry/node": "^7.109.0",
+    "@sentry/profiling-node": "^7.109.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "openai": "^4.2.0"
@@ -17,11 +20,12 @@
   },
   "scripts": {
     "postinstall": "tsc",
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf ./dist && tsc && npm run sentry:sourcemaps",
     "buildWatch": "rm -rf ./dist && tsc --watch",
     "start": "npm run build && node dist/index.js",
     "dev": "npm run buildWatch & nodemon dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sethduncan --project beastiebot ./dist && sentry-cli sourcemaps upload --org sethduncan --project beastiebot ./dist"
   },
   "repository": {
     "type": "git",
