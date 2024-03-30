@@ -6,7 +6,7 @@ import * as Sentry from "@sentry/node";
 import { processMessage } from "./bin/processMessage";
 
 Sentry.init({
-  dsn: "https://cf0fc945bcac2d5808c37c2181fa3ce5@o4506998133620736.ingest.us.sentry.io/4506998137290752",
+  dsn: process.env.SENTRY_DSN,
 });
 
 client.once("ready", (): void => {
