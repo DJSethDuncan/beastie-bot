@@ -15,8 +15,6 @@ Example:
 ## Features
 
 - `bot [query]` - Generates a text reply using `curie` -- a middle-of-the-road openai model
-- `bot smartly [query]` - Generates a text reply using `davinci` -- a smarter openai model
-- `bot dumbly [query]` - Generates a text reply using `ada` -- a pretty bad openai model
 - `bot image [query]` - Generates an image using Dall-E
 
 ### Handlers
@@ -68,7 +66,6 @@ Note: This bot will work if it's running, so if you just spin it up on your own 
 - `npm i`
 - fill in `.env` using the keys shown in `.env.example`
 - `npm run dev` OR `npm start`
-
 
 Note: If you run `npm run dev` the bot will run but will _suppress_ responses so they don't go to your Discord. They will log in the console so you can see what the responses would be. This prevents your development-environment from double-posting to an active Discord server if you already have a version of this bot running "in production."
 
