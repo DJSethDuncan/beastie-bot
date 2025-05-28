@@ -5,9 +5,11 @@ const client = new Discord.Client();
 import * as Sentry from "@sentry/node";
 import { processMessage } from "./bin/processMessage";
 
-Sentry.init({
-  dsn: process.env.SENTRY_DSN,
-});
+if (process.env.ENVIRONMENT !== "dev") {
+  Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+  });
+}
 
 client.once("ready", (): void => {
   console.log("BeastieBot is about to drop");
@@ -26,4 +28,4 @@ client.on("message", async (messagePayload: any): Promise<void> => {
   }
 });
 
-client.login(process.env.TOKEN);
+client.login(process.env.DISCORD_TOKEN);

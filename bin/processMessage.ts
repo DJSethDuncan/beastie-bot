@@ -11,11 +11,8 @@ export const processMessage = async (
   const triggerWordHandler: TriggerWordHandlerType = {
     bot: botHandler,
   };
-
   if (config.ignoreUsers.includes(author.id)) return undefined;
-
   logMessage(messagePayload);
-
   if (channel.type === "dm" || config.beSarcasticToUsers.includes(author.id))
     return sarcasm({ text: content });
 
@@ -26,7 +23,6 @@ export const processMessage = async (
         message: removeFirstWord({ text: content }),
       })
     : genericHandler({ message: content });
-
   return response;
 };
 

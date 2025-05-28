@@ -59,7 +59,7 @@ export const chatgpt = async ({
   try {
     const messageDetailsResponse = await openai.chat.completions.create({
       messages: [{ role: "user", content: getMessageDetails(query) }],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4.1-nano",
     });
 
     const messageDetails = JSON.parse(parseMessage(messageDetailsResponse));
@@ -75,7 +75,7 @@ export const chatgpt = async ({
           }),
         },
       ],
-      model: "gpt-3.5-turbo",
+      model: "gpt-4.1-nano",
     });
 
     return parseMessage(queryCompletion);
