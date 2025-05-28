@@ -13,8 +13,8 @@ export const processMessage = async (
   };
   if (config.ignoreUsers.includes(author.id)) return undefined;
   logMessage(messagePayload);
-  if (channel.type === "dm" || config.beSarcasticToUsers.includes(author.id))
-    return sarcasm({ text: content });
+  // if (channel.type === "dm" || config.beSarcasticToUsers.includes(author.id))
+  //   return sarcasm({ text: content });
 
   const messageFirstWord = getFirstWordLowercase({ text: content });
 

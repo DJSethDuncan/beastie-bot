@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import * as fs from "fs";
 import { getRandomReplyFromCollection } from "./tools";
 
 const openai = new OpenAI({
@@ -89,14 +90,38 @@ export const dalle = async ({
   query,
 }: {
   query: string;
-}): Promise<string | undefined> => {
+}): Promise<string | Buffer | undefined> => {
   try {
-    const openAIImageResponse = await openai.images.generate({
+    // Old
+    // const openAIImageResponse = await openai.images.generate({
+    //   prompt: query,
+    //   model: "dall-e-3",
+    //   n: 1,
+    //   size: "1024x1024",
+    // });
+
+    // use this when verified
+    const result = await openai.images.generate({
+      model: "gpt-image-1",
       prompt: query,
+      size: "1024x1024",
+      quality: "high",
       n: 1,
-      size: "512x512",
     });
-    return openAIImageResponse.data[0].url;
+
+    if (result.data) {
+      const imageBase64 = result.data[0].b64_json;
+      if (!imageBase64) {
+        throw new Error("No image data returned");
+      }
+
+      const imageBuffer = Buffer.from(imageBase64, "base64");
+      // use this to debug
+      // fs.writeFileSync("sprite.png", imageBuffer);
+      return imageBuffer;
+    } else {
+      return "nah";
+    }
   } catch (error) {
     console.error(error);
     return "No.";
