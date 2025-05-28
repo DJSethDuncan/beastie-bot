@@ -13,7 +13,7 @@ let lastMessageTime: number = Date.now();
 
 export const botHandler = async ({
   message,
-}: BotHandlerProps): Promise<string | undefined> => {
+}: BotHandlerProps): Promise<string | Buffer | undefined> => {
   const botMessageFirstWord = getFirstWordLowercase({ text: message });
   let response;
   if (message == "help") {

@@ -33,5 +33,7 @@ export interface WordCollectionType {
 }
 
 export interface TriggerWordHandlerType {
-  [key: string]: ({ message }: BotHandlerProps) => Promise<string | undefined>;
+  [key: string]: ({
+    message,
+  }: BotHandlerProps) => Promise<string | Buffer | undefined>;
 }
