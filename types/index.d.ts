@@ -6,18 +6,21 @@ declare module "processMessage";
 
 export interface MessagePayloadType {
   channel: {
-    name: string;
     type: string;
   };
   author: {
-    username: string;
     id: string;
+    username: string;
+    avatarURL: string;
   };
   content: string;
 }
 
 export interface BotHandlerProps {
   message: string;
+  author: {
+    id: string;
+  };
 }
 
 export interface GenericHandlerProps {
@@ -35,5 +38,6 @@ export interface WordCollectionType {
 export interface TriggerWordHandlerType {
   [key: string]: ({
     message,
-  }: BotHandlerProps) => Promise<string | Buffer | undefined>;
+    author,
+  }: BotHandlerProps) => Promise<string | undefined>;
 }

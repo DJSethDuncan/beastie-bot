@@ -4,3 +4,4 @@
 config.json
 # Sentry Config File
 .sentryclirc
+message_log.json

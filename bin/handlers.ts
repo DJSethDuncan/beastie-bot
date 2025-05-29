@@ -1,11 +1,10 @@
 import {
   getFirstWordLowercase,
-  removeFirstWord,
   getRandomReplyFromCollection,
   hasWordInWordCollection,
   beastieBoysify,
 } from "./tools";
-import { chatgpt, dalle } from "./openai";
+import { text } from "./openai";
 import { config } from "./config";
 import type { BotHandlerProps, GenericHandlerProps } from "../types";
 
@@ -13,8 +12,8 @@ let lastMessageTime: number = Date.now();
 
 export const botHandler = async ({
   message,
-}: BotHandlerProps): Promise<string | Buffer | undefined> => {
-  const botMessageFirstWord = getFirstWordLowercase({ text: message });
+  author,
+}: BotHandlerProps): Promise<string | undefined> => {
   let response;
   if (message == "help") {
     response = config.helpText;
@@ -27,16 +26,10 @@ export const botHandler = async ({
       response = getRandomReplyFromCollection({ collectionName: "rateLimit" });
     } else {
       lastMessageTime = Date.now();
-      switch (botMessageFirstWord) {
-        case "image":
-          response = await dalle({ query: removeFirstWord({ text: message }) });
-          break;
-        default:
-          response = await chatgpt({
-            query: message,
-          });
-          break;
-      }
+      response = await text({
+        query: message,
+        author,
+      });
     }
   }
 

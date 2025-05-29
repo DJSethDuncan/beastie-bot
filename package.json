@@ -23,7 +23,7 @@
     "build": "rm -rf ./dist && tsc",
     "buildWatch": "rm -rf ./dist && tsc --watch",
     "start": "npm run build && node dist/index.js",
-    "dev": "npm run buildWatch & nodemon dist/index.js",
+    "dev": "npm run buildWatch & nodemon --ignore message_log.json dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sentry:sourcemaps": "sentry-cli sourcemaps inject --org sethduncan --project beastiebot ./dist && sentry-cli sourcemaps upload --org sethduncan --project beastiebot ./dist"
   },
