@@ -12,6 +12,7 @@ let lastMessageTime: number = Date.now();
 
 export const botHandler = async ({
   message,
+  author,
 }: BotHandlerProps): Promise<string | undefined> => {
   let response;
   if (message == "help") {
@@ -27,6 +28,7 @@ export const botHandler = async ({
       lastMessageTime = Date.now();
       response = await text({
         query: message,
+        author,
       });
     }
   }

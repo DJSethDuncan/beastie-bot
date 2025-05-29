@@ -18,6 +18,9 @@ export interface MessagePayloadType {
 
 export interface BotHandlerProps {
   message: string;
+  author: {
+    id: string;
+  };
 }
 
 export interface GenericHandlerProps {
@@ -35,5 +38,6 @@ export interface WordCollectionType {
 export interface TriggerWordHandlerType {
   [key: string]: ({
     message,
+    author,
   }: BotHandlerProps) => Promise<string | undefined>;
 }

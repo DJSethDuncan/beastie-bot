@@ -28,10 +28,14 @@ const buildPrompt = ({
   query,
   hasPolitics,
   mood,
+  author,
 }: {
   query: string;
   hasPolitics: boolean;
   mood: "positive" | "negative" | "neutral";
+  author: {
+    id: string;
+  };
 }) => {
 
   // Load conversation history from message log
@@ -40,9 +44,15 @@ const buildPrompt = ({
   let prompt = "";
 
   // add context
-  prompt += "Use the following conversation history as context to respond to the request. If there is anything relevant, include a reference to the content. If there is nothing relevant, ignore the history.";
-  prompt += "Conversation history starts here: " + JSON.stringify(conversationHistory) + " --- Conversation history ends here.";
+  prompt += `You have full context of the user’s preferences, interests, and past conversations as if you remember them naturally, like a person with perfect memory.
+Never reference how you know this information.
+Do not say things like “based on your previous messages,” “you mentioned,” “as you said before,” or anything that implies you're retrieving or recalling conversation history.
+Simply incorporate the relevant information naturally into your responses, as if it’s common knowledge or intuitive context you understand about the user.`;
 
+  prompt += "Use the following conversation history as context to respond to the request. If there is anything relevant, include a reference to the content. If there is nothing relevant, ignore the history.";
+  prompt += "Specifically look for messages matching the user ID " + author.id + ".";
+  prompt += "Conversation history starts here: " + JSON.stringify(conversationHistory) + " --- Conversation history ends here.";
+  
   if (hasPolitics) {
     prompt +=
       "Respond to this prompt as though you are an angry, vulgar, hardcore libertarian.\n";
@@ -57,14 +67,17 @@ const buildPrompt = ({
   prompt += `Respond with only one or two sentences unless otherwise specified in the prompt.\n`;
   prompt += 'Your response should not start with the word "Well".\n';
   prompt += `The prompt is "${query}"`;
-
   return prompt;
 };
 
 export const text = async ({
   query,
+  author,
 }: {
   query: string;
+  author: {
+    id: string;
+  };
 }): Promise<string | null> => {
   try {
     const messageDetailsResponse = await openai.chat.completions.create({
@@ -82,6 +95,7 @@ export const text = async ({
             query,
             hasPolitics: messageDetails.hasPolitics,
             mood: messageDetails.mood,
+            author,
           }),
         },
       ],

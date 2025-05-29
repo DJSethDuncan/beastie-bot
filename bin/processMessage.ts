@@ -25,6 +25,7 @@ export const processMessage = async (
   const response = Object.keys(triggerWordHandler).includes(messageFirstWord)
     ? await triggerWordHandler[messageFirstWord]({
         message: removeFirstWord({ text: content }),
+        author,
       })
     : genericHandler({ message: content });
   
