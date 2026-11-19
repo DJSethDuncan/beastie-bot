@@ -104,7 +104,7 @@ export const moreVowels = ({ text }: TextModifierType): string => {
       }
     }
   }
-  return textArray.join();
+  return textArray.join("");
 };
 
 export const stripAlphaNum = ({ text }: TextModifierType): string => {
