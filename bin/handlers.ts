@@ -3,6 +3,7 @@ import {
   getRandomReplyFromCollection,
   hasWordInWordCollection,
   beastieBoysify,
+  rollDice,
 } from "./tools";
 import { text } from "./openai";
 import { config } from "./config";
@@ -47,4 +48,10 @@ export const genericHandler = ({ message }: GenericHandlerProps): string => {
   } else {
     return "";
   }
+};
+
+export const rollHandler = async ({
+  message,
+}: BotHandlerProps): Promise<string | undefined> => {
+  return rollDice({ text: message });
 };
