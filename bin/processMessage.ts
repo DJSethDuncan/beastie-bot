@@ -1,4 +1,4 @@
-import { botHandler, genericHandler } from "./handlers";
+import { botHandler, genericHandler, rollHandler } from "./handlers";
 import { sarcasm, getFirstWordLowercase, removeFirstWord } from "./tools";
 import { config } from "./config";
 import { logMessage as logMessageToFile } from "./messageLogger";
@@ -11,6 +11,7 @@ export const processMessage = async (
 
   const triggerWordHandler: TriggerWordHandlerType = {
     bot: botHandler,
+    roll: rollHandler,
   };
 
   if (config.ignoreUsers.includes(author.id)) return undefined;

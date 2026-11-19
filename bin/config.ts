@@ -59,5 +59,6 @@ export const config: ConfigType = {
   helpText: `You can say things like:\n
 \`bot how are you today\`\n
 \`bot image a crying puppy\`\n
+\`roll\` (a d6), \`roll d20\`, \`roll 2d6\` or \`roll 3d8+2\`\n
 There are probably some other trigger words that might get me to chime in.`,
 };

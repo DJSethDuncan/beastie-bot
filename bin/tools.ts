@@ -48,6 +48,32 @@ export const getRandomReplyFromCollection = ({
   }
 };
 
+/* Dice */
+const MAX_DICE = 20;
+const MAX_SIDES = 1000;
+
+// Parses "", "d20", "2d6" or "3d8+2" and returns the roll as a chat reply.
+export const rollDice = ({ text }: TextModifierType): string => {
+  const notation = text.trim().split(" ")[0].toLowerCase();
+  const match = /^(\d*)d(\d+)([+-]\d+)?$/.exec(notation || "d6");
+  if (!match) {
+    return "Try `roll`, `roll d20`, `roll 2d6` or `roll 3d8+2`.";
+  }
+  const count = match[1] ? parseInt(match[1], 10) : 1;
+  const sides = parseInt(match[2], 10);
+  const modifier = match[3] ? parseInt(match[3], 10) : 0;
+  if (count < 1 || count > MAX_DICE || sides < 2 || sides > MAX_SIDES) {
+    return `I roll 1-${MAX_DICE} dice with 2-${MAX_SIDES} sides.`;
+  }
+  const rolls = Array.from({ length: count }, () =>
+    getRandomInt({ min: 1, max: sides })
+  );
+  const total = rolls.reduce((sum, roll) => sum + roll, 0) + modifier;
+  if (count === 1 && modifier === 0) return `:game_die: ${total}`;
+  const modifierText = modifier ? ` ${modifier > 0 ? "+" : "-"} ${Math.abs(modifier)}` : "";
+  return `:game_die: ${total} (${rolls.join(" + ")}${modifierText})`;
+};
+
 /* Text Modifying Functions */
 export const getFirstWordLowercase = ({ text }: TextModifierType): string => {
   const stringArray = text.toLowerCase().split(" ");
